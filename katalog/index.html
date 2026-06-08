@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Katalog | Kediamanku Custom Interior Products</title>
+    <meta name="description" content="Explore Kediamanku's curated catalog of custom interior products for premium kitchens, wardrobes, bedrooms, kids rooms, storage, TV cabinets, study desks, and bed frames.">
+    <meta name="theme-color" content="#303A42">
+    <link rel="icon" href="../kediamanku-monogram.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="katalog.css">
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to catalog</a>
+
+    <header class="catalog-nav" aria-label="Catalog page navigation">
+      <a class="brand" href="../index.html" aria-label="Back to Kediamanku homepage">
+        <img src="../assets/images/logo-kediamanku-transparent.png" alt="Kediamanku Design Build logo" width="1121" height="274">
+      </a>
+      <nav aria-label="Primary navigation">
+        <a href="../index.html#home">Home</a>
+        <a href="../services/index.html">Services</a>
+        <a href="../about/index.html">About</a>
+        <a href="../projects/index.html">Projects</a>
+        <a class="is-active" href="index.html">Katalog</a>
+      </nav>
+      <a class="nav-cta" href="../index.html#contact">Book Consultation</a>
+    </header>
+
+    <main id="main">
+      <section class="catalog-hero section-pad" aria-labelledby="catalog-title">
+        <div class="container hero-panel" data-reveal>
+          <img src="../assets/images/hero-kitchen-living.webp" alt="Modern warm kitchen set catalog by Kediamanku" width="1536" height="1024">
+          <div class="hero-copy">
+            <span class="section-label">Kediamanku Catalog</span>
+            <h1 id="catalog-title" class="mask-heading">
+              <span>Custom Interior Pieces</span>
+              <span>for Refined Homes.</span>
+            </h1>
+            <p>
+              Explore Kediamanku's curated catalog of custom interior products - from premium kitchen sets and wardrobes to bedroom furniture, kids room solutions, and built-in storage.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="category-section" aria-label="Product categories">
+        <div class="container category-grid" data-stagger>
+          <article class="category-card" data-category-card="Kitchen Set" role="button" tabindex="0">
+            <img src="../assets/images/hero-kitchen-living.webp" alt="Premium kitchen set catalog category by Kediamanku" width="1536" height="1024" loading="lazy">
+            <h2>Kitchen Set</h2>
+          </article>
+          <article class="category-card" data-category-card="Lemari Custom" role="button" tabindex="0">
+            <img src="../assets/images/custom-wardrobe.webp" alt="Custom wardrobe catalog category by Kediamanku" width="1122" height="1402" loading="lazy">
+            <h2>Lemari Custom</h2>
+          </article>
+          <article class="category-card" data-category-card="Kamar Interior" role="button" tabindex="0">
+            <img src="../assets/images/bedroom-interior.webp" alt="Bedroom interior catalog category by Kediamanku" width="1122" height="1402" loading="lazy">
+            <h2>Kamar Interior</h2>
+          </article>
+          <article class="category-card" data-category-card="Kamar Anak" role="button" tabindex="0">
+            <img src="../assets/images/kids-bedroom.webp" alt="Kids room catalog category by Kediamanku" width="1122" height="1402" loading="lazy">
+            <h2>Kamar Anak</h2>
+          </article>
+        </div>
+      </section>
+
+      <section class="catalog-toolbar-section section-pad" aria-label="Catalog filters">
+        <div class="container toolbar-head" data-reveal>
+          <div>
+            <span class="section-label">Product Catalog</span>
+            <h2>Curated pieces for your home</h2>
+          </div>
+          <p><span data-product-count>0</span> products found</p>
+        </div>
+
+        <div class="container catalog-toolbar" data-reveal>
+          <label class="search-box">
+            <span>Search</span>
+            <input type="search" placeholder="Search products..." data-search>
+          </label>
+          <label class="sort-box">
+            <span>Sort by</span>
+            <select data-sort>
+              <option value="featured">Featured</option>
+              <option value="newest">Newest</option>
+              <option value="popular">Popular</option>
+              <option value="az">A-Z</option>
+              <option value="price-low">Estimated Price: Low to High</option>
+              <option value="price-high">Estimated Price: High to Low</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="container filter-pills" role="tablist" aria-label="Filter products by category" data-filters>
+          <button class="is-active" type="button" data-filter="All" aria-selected="true">All</button>
+          <button type="button" data-filter="Kitchen Set" aria-selected="false">Kitchen Set</button>
+          <button type="button" data-filter="Lemari Custom" aria-selected="false">Lemari Custom</button>
+          <button type="button" data-filter="Kamar Interior" aria-selected="false">Kamar Interior</button>
+          <button type="button" data-filter="Kamar Anak" aria-selected="false">Kamar Anak</button>
+        </div>
+
+        <section class="container product-grid" aria-label="Product catalog" data-product-grid></section>
+        <div class="container empty-state" data-empty-state hidden>
+          <h3>No products found</h3>
+          <p>Try another keyword or choose a different category.</p>
+        </div>
+      </section>
+
+      <section class="materials-band section-pad" aria-labelledby="materials-title">
+        <div class="container section-head centered" data-reveal>
+          <span class="section-label">Materials & Finishing</span>
+          <h2 id="materials-title">Materials and finishing we work with</h2>
+          <p>Premium directions for durable custom furniture: warm finishes, clean hardware, refined lighting, and practical daily use.</p>
+        </div>
+        <div class="container material-row" data-stagger>
+          <article>Premium Plywood</article>
+          <article>Matte HPL</article>
+          <article>Quartz-Look Tops</article>
+          <article>Smoked Glass</article>
+          <article>Soft-Close Hardware</article>
+          <article>Warm LED Lighting</article>
+        </div>
+      </section>
+
+      <section class="recommended-section section-pad" aria-labelledby="recommended-title">
+        <div class="container section-head split" data-reveal>
+          <h2 id="recommended-title">Recommended for your home</h2>
+          <p>Popular custom pieces homeowners often combine for a refined, organized, and comfortable interior.</p>
+        </div>
+        <div class="container recommended-grid" data-recommended></div>
+      </section>
+
+      <section class="look-section section-pad" aria-labelledby="look-title">
+        <div class="container section-head centered" data-reveal>
+          <span class="section-label">Shop the Interior Look</span>
+          <h2 id="look-title">Build a calm, warm, modern home mood.</h2>
+        </div>
+        <div class="container look-grid" data-stagger>
+          <article>
+            <img src="../assets/images/hero-kitchen-living.webp" alt="Shop the look warm kitchen and living interior by Kediamanku" width="1536" height="1024" loading="lazy">
+            <span class="hotspot one" aria-hidden="true"></span>
+            <div>
+              <h3>Warm Kitchen Living</h3>
+              <p>Kitchen set, TV cabinet, display shelving, and warm lighting.</p>
+            </div>
+          </article>
+          <article>
+            <img src="../assets/images/bedroom-interior.webp" alt="Shop the look calm bedroom interior by Kediamanku" width="1122" height="1402" loading="lazy">
+            <span class="hotspot two" aria-hidden="true"></span>
+            <div>
+              <h3>Calm Bedroom Suite</h3>
+              <p>Headboard panel, bed frame, wardrobe, and bedside storage.</p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="catalog-final-cta section-pad" aria-labelledby="catalog-cta-title">
+        <div class="container cta-panel" data-reveal>
+          <div>
+            <span class="section-label">Custom quote</span>
+            <h2 id="catalog-cta-title">Need a catalog piece adjusted to your space?</h2>
+            <p>Every Kediamanku product can be adapted by size, material, color, and storage function based on your room measurement.</p>
+          </div>
+          <a class="btn btn-light" href="../index.html#contact">Book Consultation <span aria-hidden="true">&rarr;</span></a>
+        </div>
+      </section>
+    </main>
+
+    <div class="quick-modal" aria-hidden="true" data-modal>
+      <button class="modal-backdrop" type="button" aria-label="Close quick view" data-close-modal></button>
+      <article class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-describedby="modal-description">
+        <button class="modal-close" type="button" aria-label="Close quick view" data-close-modal>&times;</button>
+        <div class="modal-image">
+          <img src="../assets/images/hero-kitchen-living.webp" alt="" data-modal-image>
+        </div>
+        <div class="modal-content">
+          <span data-modal-category>Kitchen Set</span>
+          <h2 id="modal-title" data-modal-title>Product Detail</h2>
+          <div class="modal-description" id="modal-description" data-modal-description></div>
+          <dl>
+            <div>
+              <dt>Material</dt>
+              <dd data-modal-material></dd>
+            </div>
+            <div>
+              <dt>Price range</dt>
+              <dd data-modal-price></dd>
+            </div>
+          </dl>
+          <div class="modal-actions">
+            <a data-modal-link href="#">View Product</a>
+            <a href="../index.html#contact">Request Quote</a>
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <footer class="site-footer">
+      <div class="container footer-grid">
+        <div>
+          <img class="footer-logo" src="../kediamanku-white.svg" alt="Kediamanku Design Build logo" width="210" height="46">
+          <p>
+            Premium design and build interiors for kitchens, wardrobes, bedrooms, and kids rooms.
+          </p>
+        </div>
+
+        <nav aria-label="Footer navigation">
+          <h2>Navigation</h2>
+          <a href="../index.html#home">Home</a>
+          <a href="../services/index.html">Services</a>
+          <a href="../about/index.html">About</a>
+          <a href="../projects/index.html">Projects</a>
+          <a href="index.html">Katalog</a>
+        </nav>
+
+        <nav aria-label="Footer service links">
+          <h2>Services</h2>
+          <a href="/services/kitchen-set">Kitchen Set Premium</a>
+          <a href="/services/lemari-custom">Lemari Custom</a>
+          <a href="/services/kamar-interior">Kamar Interior</a>
+          <a href="/services/kamar-anak">Kamar Anak</a>
+          <a href="/services/design-build-interior">Interior Design &amp; Build</a>
+        </nav>
+
+        <div>
+          <h2>Contact</h2>
+          <a href="../index.html#contact">Book Consultation</a>
+          <a href="../index.html#contact">Project Inquiry</a>
+          <a href="#" aria-label="Kediamanku Instagram">Instagram</a>
+          <a href="#" aria-label="Kediamanku social media">Social Media</a>
+        </div>
+      </div>
+      <div class="container footer-bottom">
+        <p>&copy; 2026 Kediamanku. All rights reserved.</p>
+        <p>Design + Build Interior</p>
+      </div>
+    </footer>
+
+    <script src="../supabase-config.js"></script>
+    <script src="katalog.js"></script>
+  </body>
+</html>
