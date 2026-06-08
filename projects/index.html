@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Our Projects | Kediamanku Interior Design & Build</title>
+    <meta name="description" content="Explore Kediamanku selected interior projects for kitchen sets, custom wardrobes, bedroom interiors, kids rooms, and storage with refined detailing.">
+    <meta name="theme-color" content="#F7F3EC">
+    <link rel="icon" href="../kediamanku-monogram.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="projects.css">
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to projects</a>
+
+    <header class="projects-nav" aria-label="Projects page navigation">
+      <a class="brand" href="../index.html" aria-label="Back to Kediamanku homepage">
+        <img src="../assets/images/logo-kediamanku-transparent.png" alt="Kediamanku Design Build logo" width="1121" height="274">
+      </a>
+      <nav aria-label="Primary navigation">
+        <a href="../index.html#home">Home</a>
+        <a href="../services/index.html">Services</a>
+        <a href="../about/index.html">About</a>
+        <a class="is-active" href="index.html">Projects</a>
+        <a href="../katalog/index.html">Katalog</a>
+      </nav>
+      <a class="nav-cta" href="../index.html#contact">Book Consultation</a>
+    </header>
+
+    <main id="main">
+      <section class="projects-intro section-pad" aria-labelledby="projects-title">
+        <div class="container intro-grid">
+          <header data-reveal>
+            <span class="section-label">Our Projects</span>
+            <h1 id="projects-title" class="mask-heading">
+              <span>Refined interiors,</span>
+              <span>crafted with precision.</span>
+            </h1>
+          </header>
+          <p data-reveal>
+            Explore Kediamanku's selected interior projects - from premium kitchen sets and custom wardrobes to bedroom interiors and kids rooms, each designed around real homes, daily function, and refined details.
+          </p>
+        </div>
+      </section>
+
+      <section class="filter-section" aria-label="Project filters">
+        <div class="container filter-bar" data-reveal>
+          <button class="filter-pill is-active" type="button" data-filter="All">All</button>
+          <button class="filter-pill" type="button" data-filter="Kitchen Set">Kitchen Set</button>
+          <button class="filter-pill" type="button" data-filter="Lemari Custom">Lemari Custom</button>
+          <button class="filter-pill" type="button" data-filter="Kamar Interior">Kamar Interior</button>
+          <button class="filter-pill" type="button" data-filter="Kamar Anak">Kamar Anak</button>
+          <button class="filter-pill" type="button" data-filter="Storage">Storage</button>
+          <button class="filter-pill" type="button" data-filter="Apartment">Apartment</button>
+          <button class="filter-pill" type="button" data-filter="House">House</button>
+        </div>
+      </section>
+
+      <section class="project-archive section-pad" aria-label="Kediamanku project archive">
+        <div class="container archive-grid" data-project-grid></div>
+        <p class="empty-state" data-empty-state>No projects yet. Add real project data from the admin dashboard.</p>
+      </section>
+
+      <section class="final-cta section-pad" aria-labelledby="projects-cta-title">
+        <div class="container cta-panel" data-reveal>
+          <div>
+            <span class="section-label">Start your project</span>
+            <h2 id="projects-cta-title">Have a room ready to transform?</h2>
+            <p>Tell us your space, service type, storage needs, and preferred mood. Kediamanku will help shape a refined design and build plan.</p>
+          </div>
+          <a class="cta-link" href="../index.html#contact">Book Consultation <span aria-hidden="true">&rarr;</span></a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-grid">
+        <div>
+          <img class="footer-logo" src="../kediamanku-white.svg" alt="Kediamanku Design Build logo" width="210" height="46">
+          <p>Premium design and build interiors for kitchens, wardrobes, bedrooms, and kids rooms.</p>
+        </div>
+        <nav aria-label="Footer navigation">
+          <h2>Navigation</h2>
+          <a href="../index.html#home">Home</a>
+          <a href="../services/index.html">Services</a>
+          <a href="../about/index.html">About</a>
+          <a href="index.html">Projects</a>
+          <a href="../katalog/index.html">Katalog</a>
+        </nav>
+        <nav aria-label="Footer service links">
+          <h2>Services</h2>
+          <a href="../services/kitchen-set/index.html">Kitchen Set Premium</a>
+          <a href="../services/lemari-custom/index.html">Lemari Custom</a>
+          <a href="../services/kamar-interior/index.html">Kamar Interior</a>
+          <a href="../services/kamar-anak/index.html">Kamar Anak</a>
+          <a href="../services/index.html">Interior Design &amp; Build</a>
+        </nav>
+        <div>
+          <h2>Contact</h2>
+          <a href="../index.html#contact">Book Consultation</a>
+          <a href="../index.html#contact">Project Inquiry</a>
+          <a href="#">Instagram</a>
+          <a href="#">Social Media</a>
+        </div>
+      </div>
+      <div class="container footer-bottom">
+        <p>&copy; 2026 Kediamanku. All rights reserved.</p>
+        <p>Design + Build Interior</p>
+      </div>
+    </footer>
+
+    <script src="../supabase-config.js"></script>
+    <script src="projects.js"></script>
+  </body>
+</html>
