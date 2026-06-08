@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 172" role="img" aria-labelledby="title desc">
+  <title id="title">Kediamanku White Logo</title>
+  <desc id="desc">White Kediamanku wordmark with Design Build tagline for dark backgrounds.</desc>
+  <rect width="780" height="172" fill="#303940"/>
+  <text x="390" y="105" text-anchor="middle" fill="#F7F2EA" font-family="Manrope, Inter, Segoe UI, sans-serif" font-size="108" font-weight="500">Kediamanku</text>
+  <path d="M23 150h112m510 0h112" fill="none" stroke="#B99964" stroke-linecap="round" stroke-width="2"/>
+  <text x="390" y="158" text-anchor="middle" fill="#F7F2EA" font-family="Inter, Segoe UI, sans-serif" font-size="24" font-weight="800" letter-spacing="13">DESIGN + BUILD</text>
+</svg>
