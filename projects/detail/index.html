@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Project Detail | Kediamanku Interior Design & Build</title>
+    <meta name="description" content="View Kediamanku project details, interior category, location, scope, materials, finishing, and project imagery.">
+    <meta name="theme-color" content="#F7F3EC">
+    <link rel="icon" href="../../kediamanku-monogram.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="../projects.css">
+    <link rel="stylesheet" href="project-detail.css">
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to project detail</a>
+
+    <header class="projects-nav" aria-label="Project detail navigation">
+      <a class="brand" href="../../index.html" aria-label="Back to Kediamanku homepage">
+        <img src="../../assets/images/logo-kediamanku-transparent.png" alt="Kediamanku Design Build logo" width="1121" height="274">
+      </a>
+      <nav aria-label="Primary navigation">
+        <a href="../../index.html#home">Home</a>
+        <a href="../../services/index.html">Services</a>
+        <a href="../../about/index.html">About</a>
+        <a class="is-active" href="../index.html">Projects</a>
+        <a href="../../katalog/index.html">Katalog</a>
+      </nav>
+      <a class="nav-cta" href="../../index.html#contact">Book Consultation</a>
+    </header>
+
+    <main id="main" class="project-detail-page">
+      <section class="project-detail-hero section-pad" aria-labelledby="project-title">
+        <div class="container project-detail-shell" data-project-shell>
+          <article class="project-detail-copy" data-reveal>
+            <nav class="project-breadcrumb" aria-label="Breadcrumb">
+              <a href="../index.html">Projects</a>
+              <span aria-hidden="true">/</span>
+              <span data-project-category>Project</span>
+            </nav>
+            <p class="section-label" data-project-label>Selected Project</p>
+            <h1 id="project-title" data-project-title>Loading project...</h1>
+            <p data-project-description>Fetching Kediamanku project details.</p>
+            <a class="project-detail-cta" href="../../index.html#contact">Book Consultation <span aria-hidden="true">&rarr;</span></a>
+          </article>
+
+          <figure class="project-detail-image" data-reveal>
+            <img data-project-image src="../../assets/images/hero-kitchen-living.webp" alt="Kediamanku interior project" width="1400" height="1000">
+          </figure>
+        </div>
+      </section>
+
+      <section class="project-detail-specs section-pad" aria-label="Project metadata">
+        <div class="container">
+          <dl class="project-spec-grid" data-project-specs></dl>
+          <div class="project-tags" data-project-tags></div>
+        </div>
+      </section>
+
+      <section class="project-detail-final section-pad" aria-labelledby="project-final-title">
+        <div class="container cta-panel" data-reveal>
+          <div>
+            <span class="section-label">Inspired by this project?</span>
+            <h2 id="project-final-title">Start your own refined interior plan.</h2>
+            <p>Share your room, service type, storage needs, and finishing direction. Kediamanku will help shape the right design and build journey.</p>
+          </div>
+          <a class="cta-link" href="../../index.html#contact">Book Consultation <span aria-hidden="true">&rarr;</span></a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-grid">
+        <div>
+          <img class="footer-logo" src="../../kediamanku-white.svg" alt="Kediamanku Design Build logo" width="210" height="46">
+          <p>Premium design and build interiors for kitchens, wardrobes, bedrooms, and kids rooms.</p>
+        </div>
+        <nav aria-label="Footer navigation">
+          <h2>Navigation</h2>
+          <a href="../../index.html#home">Home</a>
+          <a href="../../services/index.html">Services</a>
+          <a href="../../about/index.html">About</a>
+          <a href="../index.html">Projects</a>
+          <a href="../../katalog/index.html">Katalog</a>
+        </nav>
+        <nav aria-label="Footer service links">
+          <h2>Services</h2>
+          <a href="../../services/kitchen-set/index.html">Kitchen Set Premium</a>
+          <a href="../../services/lemari-custom/index.html">Lemari Custom</a>
+          <a href="../../services/kamar-interior/index.html">Kamar Interior</a>
+          <a href="../../services/kamar-anak/index.html">Kamar Anak</a>
+          <a href="../../services/index.html">Interior Design &amp; Build</a>
+        </nav>
+        <div>
+          <h2>Contact</h2>
+          <a href="../../index.html#contact">Book Consultation</a>
+          <a href="../../index.html#contact">Project Inquiry</a>
+          <a href="#">Instagram</a>
+          <a href="#">Social Media</a>
+        </div>
+      </div>
+      <div class="container footer-bottom">
+        <p>&copy; 2026 Kediamanku. All rights reserved.</p>
+        <p>Design + Build Interior</p>
+      </div>
+    </footer>
+
+    <script src="../../supabase-config.js"></script>
+    <script src="project-detail.js"></script>
+  </body>
+</html>
