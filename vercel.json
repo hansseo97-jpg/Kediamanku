@@ -1,0 +1,29 @@
+{
+  "cleanUrls": true,
+  "trailingSlash": true,
+  "rewrites": [
+    {
+      "source": "/katalog/:slug/",
+      "destination": "/katalog/product/index.html?slug=:slug"
+    },
+    {
+      "source": "/projects/:slug/",
+      "destination": "/projects/detail/index.html?slug=:slug"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        }
+      ]
+    }
+  ]
+}
