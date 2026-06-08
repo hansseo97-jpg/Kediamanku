@@ -13,7 +13,7 @@
   <body>
     <a class="skip-link" href="#main">Skip to project detail</a>
 
-    <header class="projects-nav" aria-label="Project detail navigation">
+    <header class="projects-nav detail-nav" aria-label="Project detail navigation">
       <a class="brand" href="../../index.html" aria-label="Back to Kediamanku homepage">
         <img src="../../assets/images/logo-kediamanku-transparent.png" alt="Kediamanku Design Build logo" width="1121" height="274">
       </a>
@@ -28,34 +28,90 @@
     </header>
 
     <main id="main" class="project-detail-page">
-      <section class="project-detail-hero section-pad" aria-labelledby="project-title">
-        <div class="container project-detail-shell" data-project-shell>
-          <article class="project-detail-copy" data-reveal>
-            <nav class="project-breadcrumb" aria-label="Breadcrumb">
-              <a href="../index.html">Projects</a>
-              <span aria-hidden="true">/</span>
-              <span data-project-category>Project</span>
-            </nav>
-            <p class="section-label" data-project-label>Selected Project</p>
-            <h1 id="project-title" data-project-title>Loading project...</h1>
-            <p data-project-description>Fetching Kediamanku project details.</p>
-            <a class="project-detail-cta" href="../../index.html#contact">Book Consultation <span aria-hidden="true">&rarr;</span></a>
-          </article>
+      <section class="project-hero" aria-labelledby="project-title">
+        <div class="container">
+          <a class="back-link" href="../index.html" data-reveal>Back to Projects</a>
+          <div class="project-title-row">
+            <span class="project-kicker" data-project-kicker data-reveal>Interior Project</span>
+            <h1 id="project-title" class="project-title" data-project-title>
+              <span>Loading</span>
+              <span>Project</span>
+            </h1>
+          </div>
 
-          <figure class="project-detail-image" data-reveal>
-            <img data-project-image src="../../assets/images/hero-kitchen-living.webp" alt="Kediamanku interior project" width="1400" height="1000">
+          <div class="hero-divider" aria-hidden="true">
+            <span></span>
+          </div>
+
+          <div class="hero-labels" data-reveal>
+            <span data-project-category-label>Interior Design</span>
+            <span data-project-type-label>Design + Build Interior</span>
+          </div>
+
+          <figure class="hero-image-wrap" data-reveal-image>
+            <img data-hero-image src="../../assets/images/hero-kitchen-living.webp" alt="Kediamanku interior project" width="1600" height="980">
           </figure>
         </div>
       </section>
 
-      <section class="project-detail-specs section-pad" aria-label="Project metadata">
-        <div class="container">
-          <dl class="project-spec-grid" data-project-specs></dl>
-          <div class="project-tags" data-project-tags></div>
+      <section class="project-overview-section" aria-labelledby="project-overview">
+        <div class="container overview-grid">
+          <div class="project-meta-panel" data-reveal>
+            <span class="section-label">Project Metadata</span>
+            <dl data-metadata-list></dl>
+          </div>
+
+          <article class="project-narrative" data-reveal>
+            <span class="section-label">Project Overview</span>
+            <h2 id="project-overview">A refined interior shaped around real daily living.</h2>
+            <p data-narrative-copy>
+              Kediamanku designs each project around material warmth, storage precision, daily function, and refined finishing.
+            </p>
+          </article>
         </div>
       </section>
 
-      <section class="project-detail-final section-pad" aria-labelledby="project-final-title">
+      <section class="project-gallery-section" aria-labelledby="gallery-title">
+        <div class="container">
+          <header class="section-heading" data-reveal>
+            <span class="section-label">Project Gallery</span>
+            <h2 id="gallery-title">Selected interior views and details.</h2>
+          </header>
+          <div class="editorial-gallery" data-gallery></div>
+        </div>
+      </section>
+
+      <section class="detail-scope-section" aria-labelledby="scope-title">
+        <div class="container detail-scope-grid">
+          <div data-reveal>
+            <span class="section-label">Design Details</span>
+            <h2 id="scope-title">Scope of work</h2>
+          </div>
+          <div class="scope-list" data-scope-list></div>
+        </div>
+      </section>
+
+      <section class="materials-section" aria-labelledby="materials-title">
+        <div class="container materials-grid">
+          <div data-reveal>
+            <span class="section-label">Materials &amp; Finishing</span>
+            <h2 id="materials-title">Warm material direction with precise detailing.</h2>
+          </div>
+          <div class="material-tags" data-material-tags></div>
+        </div>
+      </section>
+
+      <section class="related-section" aria-labelledby="related-title">
+        <div class="container">
+          <header class="section-heading" data-reveal>
+            <span class="section-label">Related Projects</span>
+            <h2 id="related-title">More refined Kediamanku interiors.</h2>
+          </header>
+          <div class="related-projects" data-related-projects></div>
+        </div>
+      </section>
+
+      <section class="project-detail-final" aria-labelledby="project-final-title">
         <div class="container cta-panel" data-reveal>
           <div>
             <span class="section-label">Inspired by this project?</span>
