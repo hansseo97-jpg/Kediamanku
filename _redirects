@@ -1,0 +1,2 @@
+/katalog/:slug  /katalog/product/index.html?slug=:slug  200
+/projects/:slug  /projects/detail/index.html?slug=:slug  200
