@@ -1,2 +1,5 @@
 /katalog/:slug  /katalog/product/index.html?slug=:slug  200
 /projects/:slug  /projects/detail/index.html?slug=:slug  200
+/blog/:slug  /blog/detail/index.html?slug=:slug  200
+/admin/blog/new  /admin/blog/index.html?mode=new  200
+/admin/blog/:id/edit  /admin/blog/index.html?id=:id  200
