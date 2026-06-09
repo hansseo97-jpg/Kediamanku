@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Kediamanku Interior Blog</title>
+    <meta name="description" content="Kediamanku editorial articles about premium custom interiors, kitchen sets, wardrobes, bedrooms, and kids rooms.">
+    <meta name="theme-color" content="#F7F3EC">
+    <link rel="icon" href="../kediamanku-monogram.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="../projects/projects.css">
+    <style>
+      .archive-card figure { aspect-ratio: 16 / 11; border-radius: 20px; }
+      .archive-meta { grid-template-columns: 84px minmax(0, 1fr); min-height: 108px; }
+      .projects-nav { display: none; }
+      .blog-hidden-note { max-width: 680px; color: rgba(48,58,66,.68); font-weight: 650; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <section class="projects-intro">
+        <div class="container intro-grid" data-reveal>
+          <header>
+            <span class="section-label">Kediamanku Blog</span>
+            <h1 class="mask-heading"><span>Interior notes</span><span>for refined homes.</span></h1>
+          </header>
+          <p class="blog-hidden-note">A hidden SEO editorial archive for Kediamanku. Articles are not shown in the main navigation but remain indexable when published.</p>
+        </div>
+      </section>
+
+      <section class="project-archive section-pad" aria-label="Published Kediamanku blog articles">
+        <div class="container archive-grid" data-blog-archive></div>
+        <p class="empty-state" data-empty-state hidden>No published articles yet.</p>
+      </section>
+    </main>
+
+    <script src="../supabase-config.js"></script>
+    <script src="blog-archive.js"></script>
+  </body>
+</html>
