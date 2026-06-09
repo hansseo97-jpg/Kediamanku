@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Kediamanku Blog Admin</title>
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="theme-color" content="#303A42">
+    <link rel="icon" href="../../kediamanku-monogram.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="../admin.css">
+    <link rel="stylesheet" href="blog-admin.css">
+  </head>
+  <body>
+    <main class="admin-shell blog-admin-shell">
+      <header class="admin-header">
+        <a class="brand" href="../index.html" aria-label="Back to Kediamanku admin">
+          <img src="../../assets/images/logo-kediamanku-transparent.png" alt="Kediamanku Design Build logo" width="1121" height="274">
+        </a>
+        <div><span class="eyebrow">Hidden SEO Blog</span><h1>Kediamanku Blog Manager</h1><p>Create, edit, save draft, publish, preview, and delete SEO articles. Blog stays hidden from main navigation.</p></div>
+        <aside class="security-card"><strong>Admin Only</strong><span>Posts are stored in Supabase and public pages only fetch published articles.</span></aside>
+      </header>
+      <section class="config-warning" data-config-warning hidden><strong>Supabase belum aktif.</strong> Pastikan <code>supabase-config.js</code> sudah memakai project Supabase aktif.</section>
+      <section class="auth-card" data-auth-card><form data-login-form><h2>Admin Login</h2><label>Email<input name="email" type="email" autocomplete="email" maxlength="160" required></label><label>Password<input name="password" type="password" autocomplete="current-password" maxlength="160" required></label><button class="btn-primary" type="submit">Login Admin <span aria-hidden="true">&rarr;</span></button><p class="form-status" data-login-status role="status"></p></form></section>
+      <section class="dashboard blog-dashboard" data-dashboard hidden>
+        <div class="dashboard-top"><div><span class="eyebrow">Editorial Dashboard</span><h2>Blog Posts</h2></div><div class="blog-actions"><a class="btn-secondary" href="../index.html">Main Admin</a><button class="btn-secondary" type="button" data-logout>Logout</button></div></div>
+        <p class="form-status global-status" data-global-status role="status"></p>
+        <section class="blog-grid">
+          <aside class="blog-list-panel"><div class="blog-toolbar"><label>Search<input data-search type="search" placeholder="Search articles..."></label><label>Status<select data-status-filter><option value="all">All</option><option value="draft">Draft</option><option value="published">Published</option></select></label><label>Category<input data-category-filter placeholder="All categories"></label><button class="btn-primary" type="button" data-new-post>New Article <span aria-hidden="true">&rarr;</span></button></div><div class="blog-table-wrap"><table class="blog-table"><thead><tr><th>Article</th><th>Status</th><th>Updated</th><th>Actions</th></tr></thead><tbody data-post-list><tr><td colspan="4">No articles loaded.</td></tr></tbody></table></div></aside>
+          <section class="blog-editor-panel" aria-labelledby="editor-title"><div class="panel-head"><h3 id="editor-title" data-editor-title>Create Article</h3><p>Use content blocks for clean SEO markup. Format one block per line: <code>h2: Heading</code>, <code>p: Paragraph</code>, <code>quote: Quote</code>, <code>list: Item one | Item two</code>, or <code>image: URL | Alt text</code>.</p></div>
+            <form class="admin-form blog-form" data-blog-form>
+              <label>Title<input name="title" maxlength="180" required></label><label>Slug<input name="slug" maxlength="120" placeholder="auto-generated-from-title"></label><label class="span-2">Excerpt<textarea name="excerpt" rows="3" maxlength="420" required></textarea></label><label>Category<input name="category" maxlength="80" placeholder="Kitchen Set" required></label><label>Tags<input name="tags" maxlength="260" placeholder="kitchen set, interior rumah modern"></label><label>Author Name<input name="author_name" maxlength="140" value="Kediamanku Editorial Team"></label><label>Author Role<input name="author_role" maxlength="140" value="Interior Design & Build"></label><label>Author Avatar URL<input name="author_avatar" maxlength="800" placeholder="Optional author image URL"></label><label>Featured Image File<input name="featured_file" type="file" accept="image/png,image/jpeg,image/webp,image/gif"></label><label>Featured Image URL<input name="featured_image" maxlength="800" placeholder="Optional external image URL"></label><label>Read Time<input name="read_time_minutes" type="number" min="1" max="60" value="4"></label><label class="span-2">Article Content Blocks<textarea name="content_blocks" rows="14" required placeholder="h2: What makes a premium kitchen set?
+p: Premium kitchens combine measured storage, durable material direction, and calm visual composition.
+h3: Material direction
+list: HPL finishing | Plywood structure | Soft-close hardware
+quote: A refined interior should feel beautiful and practical every day."></textarea></label><label>SEO Title<input name="seo_title" maxlength="180"></label><label>SEO Keywords<input name="seo_keywords" maxlength="260" placeholder="jasa interior design, kitchen set premium"></label><label class="span-2">SEO Description<textarea name="seo_description" rows="3" maxlength="220"></textarea></label><div class="span-2 editor-buttons"><button class="btn-secondary" type="button" data-preview>Preview</button><button class="btn-secondary" type="submit" data-save-draft>Save Draft</button><button class="btn-primary" type="submit" data-publish>Publish <span aria-hidden="true">&rarr;</span></button><button class="btn-secondary" type="button" data-reset-form>Reset</button></div>
+            </form>
+          </section>
+        </section>
+      </section>
+    </main>
+    <div class="preview-modal" data-preview-modal aria-hidden="true"><div class="preview-backdrop" data-close-preview></div><article class="preview-card" role="dialog" aria-modal="true" aria-labelledby="preview-title"><button class="preview-close" type="button" data-close-preview aria-label="Close preview">&times;</button><span data-preview-category>Category</span><h2 id="preview-title" data-preview-title>Article Preview</h2><p data-preview-excerpt></p><div data-preview-content></div></article></div>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="../../supabase-config.js"></script><script src="blog-admin.js"></script>
+  </body>
+</html>
