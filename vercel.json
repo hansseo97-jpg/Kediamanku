@@ -9,6 +9,18 @@
     {
       "source": "/projects/:slug/",
       "destination": "/projects/detail/index.html?slug=:slug"
+    },
+    {
+      "source": "/blog/:slug/",
+      "destination": "/blog/detail/index.html?slug=:slug"
+    },
+    {
+      "source": "/admin/blog/new/",
+      "destination": "/admin/blog/index.html?mode=new"
+    },
+    {
+      "source": "/admin/blog/:id/edit/",
+      "destination": "/admin/blog/index.html?id=:id"
     }
   ],
   "headers": [
