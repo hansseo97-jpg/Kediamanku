@@ -1,0 +1,121 @@
+.project-overview-section,
+.detail-scope-section,
+.materials-section,
+.project-testimonial-section,
+.project-detail-final {
+  padding: clamp(86px, 10vw, 150px) 0;
+  background: #f7f3ec;
+}
+
+.project-narrative h2 {
+  max-width: 820px;
+  font-size: clamp(42px, 5.2vw, 78px);
+  line-height: 1;
+}
+
+.project-narrative p {
+  max-width: 760px;
+  color: rgba(21, 23, 22, 0.86);
+  font-size: clamp(18px, 1.7vw, 28px);
+  font-weight: 650;
+  line-height: 1.45;
+}
+
+.testimonial-case {
+  display: grid;
+  max-width: 1120px;
+  gap: clamp(22px, 4vw, 44px);
+}
+
+.testimonial-metric {
+  display: grid;
+  gap: 8px;
+}
+
+.testimonial-metric strong {
+  color: #151716;
+  font-family: var(--display);
+  font-size: clamp(78px, 12vw, 176px);
+  font-weight: 420;
+  line-height: 0.86;
+  letter-spacing: 0;
+}
+
+.testimonial-metric span,
+.testimonial-client span {
+  color: rgba(48, 58, 66, 0.7);
+  font-family: var(--body);
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.testimonial-rule {
+  position: relative;
+  height: 1px;
+  background: rgba(21, 23, 22, 0.28);
+}
+
+.testimonial-rule span {
+  position: absolute;
+  top: 50%;
+  left: 43%;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #c7a56a;
+  box-shadow: 0 0 0 8px rgba(199, 165, 106, 0.12);
+  transform: translate(-50%, -50%);
+}
+
+.testimonial-case blockquote {
+  margin: 0;
+}
+
+.testimonial-case blockquote p {
+  max-width: 980px;
+  margin: 0;
+  color: #151716;
+  font-family: var(--display);
+  font-size: clamp(32px, 4.6vw, 68px);
+  font-weight: 500;
+  line-height: 1.08;
+  letter-spacing: 0;
+}
+
+.testimonial-client {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  margin-top: 8px;
+}
+
+.testimonial-client img {
+  width: 58px;
+  height: 58px;
+  border: 1px solid rgba(48, 58, 66, 0.12);
+  border-radius: 999px;
+  background: #f7f3ec;
+  object-fit: cover;
+}
+
+.testimonial-client strong {
+  display: block;
+  margin-bottom: 2px;
+  color: #151716;
+  font-size: 15px;
+  font-weight: 900;
+}
+
+@media (max-width: 920px) {
+  .testimonial-case blockquote p {
+    font-size: clamp(28px, 7vw, 44px);
+  }
+}
+
+@media (max-width: 640px) {
+  .project-narrative p {
+    font-size: 18px;
+  }
+}
