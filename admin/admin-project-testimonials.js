@@ -7,7 +7,14 @@
   const client = window.supabase.createClient(
     config.restUrl.replace("/rest/v1", ""),
     config.anonKey,
-    { auth: { persistSession: true, autoRefreshToken: true } }
+    {
+      auth: {
+        persistSession: true,
+        autoRefreshToken: true,
+        detectSessionInUrl: false,
+        storageKey: "kediamanku-admin-auth",
+      },
+    }
   );
 
   let pendingProjectTestimonial = null;

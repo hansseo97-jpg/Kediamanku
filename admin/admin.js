@@ -5,8 +5,17 @@ const isConfigured = Boolean(
   !config.anonKey.includes("PASTE_SUPABASE_ANON_PUBLIC_KEY_HERE")
 );
 
+const supabaseAuthOptions = {
+  auth: {
+    persistSession: true,
+    autoRefreshToken: true,
+    detectSessionInUrl: false,
+    storageKey: "kediamanku-admin-auth",
+  },
+};
+
 const supabaseClient = isConfigured && window.supabase
-  ? window.supabase.createClient(config.url, config.anonKey)
+  ? window.supabase.createClient(config.url, config.anonKey, supabaseAuthOptions)
   : null;
 const STORAGE_BUCKET = "kediamanku-images";
 
@@ -73,6 +82,39 @@ function setStatus(element, message, type = "") {
   element.textContent = message || "";
   element.classList.toggle("is-error", type === "error");
   element.classList.toggle("is-success", type === "success");
+}
+
+function adminAccessMessage(session) {
+  const userId = session?.user?.id || "PASTE_AUTH_USER_ID_HERE";
+  const email = session?.user?.email || "admin@kediamanku.com";
+  return [
+    "Login berhasil, tapi akun ini belum terdaftar sebagai admin di Supabase project yang aktif.",
+    "Buka Supabase SQL Editor lalu jalankan:",
+    `insert into public.admin_users (user_id, email) values ('${userId}', '${email}') on conflict (user_id) do update set email = excluded.email;`,
+  ].join(" ");
+}
+
+function formatSupabaseError(error) {
+  const message = error?.message || "Supabase request failed.";
+  if (/timed out/i.test(message)) {
+    return "Request Supabase terlalu lama merespons. Cek koneksi internet, anon key Supabase, dan pastikan project Supabase aktif.";
+  }
+  if (/row-level security/i.test(message)) {
+    return "Akses ditolak oleh Row Level Security. Pastikan akun login sudah masuk tabel public.admin_users di Supabase project yang aktif.";
+  }
+  if (/could not find the function public\.is_admin|function .*is_admin/i.test(message)) {
+    return "SQL admin backend belum lengkap. Jalankan supabase/admin-backend.sql di Supabase SQL Editor.";
+  }
+  return message;
+}
+
+function withTimeout(promise, timeoutMs, label) {
+  return Promise.race([
+    promise,
+    new Promise((_, reject) => {
+      window.setTimeout(() => reject(new Error(`${label} timed out`)), timeoutMs);
+    }),
+  ]);
 }
 
 function cleanText(value, maxLength = 2000) {
@@ -328,7 +370,7 @@ function setActiveTab(tabName) {
 
 async function requireSession() {
   if (!supabaseClient) return null;
-  const { data } = await supabaseClient.auth.getSession();
+  const { data } = await withTimeout(supabaseClient.auth.getSession(), 8000, "Session check");
   return data.session;
 }
 
@@ -337,17 +379,40 @@ function showDashboard(isLoggedIn) {
   dashboard.hidden = !isLoggedIn;
 }
 
+async function checkAdminAccess(session) {
+  if (!supabaseClient || !session) return false;
+
+  const { data, error } = await withTimeout(supabaseClient.rpc("is_admin"), 8000, "Admin access check");
+  if (error) {
+    setStatus(loginStatus, formatSupabaseError(error), "error");
+    return false;
+  }
+
+  if (data !== true) {
+    setStatus(loginStatus, adminAccessMessage(session), "error");
+    return false;
+  }
+
+  return true;
+}
+
 async function refreshSessionView() {
-  const session = await requireSession();
-  showDashboard(Boolean(session));
-  if (session) {
-    await Promise.all([
-      loadRecent("catalog_products"),
-      loadRecent("testimonials"),
-      loadRecent("projects"),
-      loadRecent("team_members"),
-      loadLeads(),
-    ]);
+  try {
+    const session = await requireSession();
+    const hasAdminAccess = await checkAdminAccess(session);
+    showDashboard(Boolean(session && hasAdminAccess));
+    if (session && hasAdminAccess) {
+      await Promise.all([
+        loadRecent("catalog_products"),
+        loadRecent("testimonials"),
+        loadRecent("projects"),
+        loadRecent("team_members"),
+        loadLeads(),
+      ]);
+    }
+  } catch (error) {
+    showDashboard(false);
+    setStatus(loginStatus, formatSupabaseError(error), "error");
   }
 }
 
@@ -356,20 +421,32 @@ loginForm.addEventListener("submit", async (event) => {
   if (!supabaseClient) return;
 
   setStatus(loginStatus, "Logging in...");
+  const submitButton = loginForm.querySelector('button[type="submit"]');
+  if (submitButton) submitButton.disabled = true;
   const data = formPayload(loginForm);
-  const { error } = await supabaseClient.auth.signInWithPassword({
-    email: data.email,
-    password: data.password,
-  });
+  try {
+    const { error } = await withTimeout(
+      supabaseClient.auth.signInWithPassword({
+        email: data.email,
+        password: data.password,
+      }),
+      12000,
+      "Login"
+    );
 
-  if (error) {
-    setStatus(loginStatus, error.message, "error");
-    return;
+    if (error) {
+      setStatus(loginStatus, formatSupabaseError(error), "error");
+      return;
+    }
+
+    loginForm.reset();
+    setStatus(loginStatus, "Login berhasil.", "success");
+    await refreshSessionView();
+  } catch (error) {
+    setStatus(loginStatus, formatSupabaseError(error), "error");
+  } finally {
+    if (submitButton) submitButton.disabled = false;
   }
-
-  loginForm.reset();
-  setStatus(loginStatus, "Login berhasil.", "success");
-  await refreshSessionView();
 });
 
 logoutButton.addEventListener("click", async () => {
@@ -416,7 +493,7 @@ async function saveRow(table, payload, form) {
   const { error } = await query;
 
   if (error) {
-    setStatus(globalStatus, error.message, "error");
+    setStatus(globalStatus, formatSupabaseError(error), "error");
     return;
   }
 
@@ -496,7 +573,7 @@ document.querySelector("[data-product-form]").addEventListener("submit", async (
       sort_order: numberOrDefault(data.sort_order),
     };
   } catch (error) {
-    setStatus(globalStatus, error.message, "error");
+    setStatus(globalStatus, formatSupabaseError(error), "error");
     return;
   }
 
@@ -538,7 +615,7 @@ document.querySelector("[data-testimonial-form]").addEventListener("submit", asy
       sort_order: numberOrDefault(data.sort_order),
     };
   } catch (error) {
-    setStatus(globalStatus, error.message, "error");
+    setStatus(globalStatus, formatSupabaseError(error), "error");
     return;
   }
 
@@ -555,6 +632,7 @@ document.querySelector("[data-project-form]").addEventListener("submit", async (
   try {
     const title = requireText(data.title, "Project title", 160);
     const imageUrl = cleanUrl(data.image_url);
+    const testimonialImageUrl = cleanUrl(data.testimonial_image_url);
     const tags = String(data.tags || "")
       .split(",")
       .map((tag) => cleanText(tag, 40))
@@ -575,12 +653,18 @@ document.querySelector("[data-project-form]").addEventListener("submit", async (
       image_url: uploadedImageUrl || imageUrl,
       image_alt: nullable(data.image_alt) || `${title} project by Kediamanku`,
       tags,
+      testimonial_metric: nullable(data.testimonial_metric),
+      testimonial_metric_label: nullable(data.testimonial_metric_label),
+      testimonial_quote: nullable(data.testimonial_quote),
+      testimonial_client_name: nullable(data.testimonial_client_name),
+      testimonial_client_role: nullable(data.testimonial_client_role),
+      testimonial_image_url: testimonialImageUrl,
       is_featured: checked(form, "is_featured"),
       is_published: checked(form, "is_published"),
       sort_order: numberOrDefault(data.sort_order),
     };
   } catch (error) {
-    setStatus(globalStatus, error.message, "error");
+    setStatus(globalStatus, formatSupabaseError(error), "error");
     return;
   }
 
@@ -613,7 +697,7 @@ document.querySelector("[data-team-form]").addEventListener("submit", async (eve
       sort_order: numberOrDefault(data.sort_order),
     };
   } catch (error) {
-    setStatus(globalStatus, error.message, "error");
+    setStatus(globalStatus, formatSupabaseError(error), "error");
     return;
   }
 
@@ -639,7 +723,7 @@ async function loadRecent(table) {
     .order("created_at", { ascending: false });
 
   if (error) {
-    renderListMessage(list, "Cannot load data", error.message);
+    renderListMessage(list, "Cannot load data", formatSupabaseError(error));
     return;
   }
 
@@ -745,6 +829,12 @@ function populateForm(table, row) {
       image_url: row.image_url,
       image_alt: row.image_alt,
       tags: Array.isArray(row.tags) ? row.tags.join(", ") : row.tags,
+      testimonial_metric: row.testimonial_metric,
+      testimonial_metric_label: row.testimonial_metric_label,
+      testimonial_quote: row.testimonial_quote,
+      testimonial_client_name: row.testimonial_client_name,
+      testimonial_client_role: row.testimonial_client_role,
+      testimonial_image_url: row.testimonial_image_url,
       sort_order: row.sort_order,
       is_featured: row.is_featured,
       is_published: row.is_published,
@@ -783,7 +873,7 @@ async function editRow(table, id) {
     .single();
 
   if (error) {
-    setStatus(globalStatus, error.message, "error");
+    setStatus(globalStatus, formatSupabaseError(error), "error");
     return;
   }
 
@@ -820,7 +910,7 @@ async function deleteRow(table, id, name) {
     .eq("id", id);
 
   if (error) {
-    setStatus(globalStatus, error.message, "error");
+    setStatus(globalStatus, formatSupabaseError(error), "error");
     return;
   }
 
@@ -887,7 +977,7 @@ async function loadLeads() {
     .limit(100);
 
   if (error) {
-    renderLeadMessage(error.message);
+    renderLeadMessage(formatSupabaseError(error));
     return;
   }
 
@@ -913,7 +1003,7 @@ document.querySelector("[data-refresh-leads]").addEventListener("click", loadLea
 
 if (supabaseClient) {
   supabaseClient.auth.onAuthStateChange(() => {
-    refreshSessionView();
+    window.setTimeout(() => refreshSessionView(), 0);
   });
   refreshSessionView();
 }

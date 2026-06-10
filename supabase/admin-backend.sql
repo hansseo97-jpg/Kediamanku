@@ -4,7 +4,8 @@
 -- Setup steps after running:
 -- 1. Create an admin account in Supabase Auth.
 -- 2. Copy that user's Auth UID.
--- 3. Insert the UID into public.admin_users with the statement near the bottom.
+-- 3. Insert the UID into public.admin_users with the statement near the bottom,
+--    or run supabase/register-admin-user.sql after changing the email value.
 -- 4. Put your anon public key in supabase-config.js.
 
 create extension if not exists pgcrypto;
@@ -100,12 +101,25 @@ create table if not exists public.projects (
   image_url text,
   image_alt text,
   tags text[] not null default '{}',
+  testimonial_metric text,
+  testimonial_metric_label text,
+  testimonial_quote text,
+  testimonial_client_name text,
+  testimonial_client_role text,
+  testimonial_image_url text,
   is_featured boolean not null default false,
   is_published boolean not null default true,
   sort_order int not null default 0,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
+
+alter table public.projects add column if not exists testimonial_metric text;
+alter table public.projects add column if not exists testimonial_metric_label text;
+alter table public.projects add column if not exists testimonial_quote text;
+alter table public.projects add column if not exists testimonial_client_name text;
+alter table public.projects add column if not exists testimonial_client_role text;
+alter table public.projects add column if not exists testimonial_image_url text;
 
 create table if not exists public.leads (
   id uuid primary key default gen_random_uuid(),
@@ -279,13 +293,35 @@ begin
       char_length(title) between 1 and 160 and
       (location is null or char_length(location) <= 160) and
       (area_scope is null or char_length(area_scope) <= 260) and
-      (materials is null or char_length(materials) <= 320)
+      (materials is null or char_length(materials) <= 320) and
+      (testimonial_metric is null or char_length(testimonial_metric) <= 24) and
+      (testimonial_metric_label is null or char_length(testimonial_metric_label) <= 120) and
+      (testimonial_quote is null or char_length(testimonial_quote) <= 700) and
+      (testimonial_client_name is null or char_length(testimonial_client_name) <= 140) and
+      (testimonial_client_role is null or char_length(testimonial_client_role) <= 160)
     );
   end if;
 
   if not exists (select 1 from pg_constraint where conname = 'projects_safe_image_url') then
     alter table public.projects add constraint projects_safe_image_url check (
-      image_url is null or image_url !~* '^[[:space:]]*(javascript|data|vbscript):'
+      (image_url is null or image_url !~* '^[[:space:]]*(javascript|data|vbscript):') and
+      (testimonial_image_url is null or testimonial_image_url !~* '^[[:space:]]*(javascript|data|vbscript):')
+    );
+  end if;
+
+  if not exists (select 1 from pg_constraint where conname = 'projects_testimonial_text_length') then
+    alter table public.projects add constraint projects_testimonial_text_length check (
+      (testimonial_metric is null or char_length(testimonial_metric) <= 24) and
+      (testimonial_metric_label is null or char_length(testimonial_metric_label) <= 120) and
+      (testimonial_quote is null or char_length(testimonial_quote) <= 700) and
+      (testimonial_client_name is null or char_length(testimonial_client_name) <= 140) and
+      (testimonial_client_role is null or char_length(testimonial_client_role) <= 160)
+    );
+  end if;
+
+  if not exists (select 1 from pg_constraint where conname = 'projects_safe_testimonial_image_url') then
+    alter table public.projects add constraint projects_safe_testimonial_image_url check (
+      testimonial_image_url is null or testimonial_image_url !~* '^[[:space:]]*(javascript|data|vbscript):'
     );
   end if;
 
