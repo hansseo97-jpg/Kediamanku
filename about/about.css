@@ -54,7 +54,9 @@ a {
 }
 
 button,
-input {
+input,
+select,
+textarea {
   font: inherit;
 }
 
@@ -629,50 +631,60 @@ p {
 }
 
 .about-final-cta {
+  padding-top: 40px;
   background: var(--ivory);
 }
 
-.cta-shell {
+.cta-panel {
   display: grid;
-  grid-template-columns: 0.82fr 1fr;
-  gap: 46px;
-  align-items: center;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 40px;
+  align-items: end;
   overflow: hidden;
-  padding: 28px;
-  border-radius: 34px;
+  padding: clamp(44px, 6vw, 70px);
+  border-radius: 40px;
   background:
-    radial-gradient(circle at 92% 4%, rgba(199, 165, 106, 0.18), transparent 30%),
+    linear-gradient(135deg, rgba(185, 153, 100, 0.16), rgba(48, 57, 64, 0) 46%),
     var(--charcoal);
   color: var(--ivory);
   box-shadow: 0 34px 92px rgba(48, 58, 66, 0.2);
 }
 
-.cta-image {
-  height: 430px;
-  overflow: hidden;
-  border-radius: 26px;
+.eyebrow {
+  margin: 0 0 28px;
+  color: var(--gold);
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 
-.cta-copy {
-  display: grid;
-  gap: 22px;
-  max-width: 680px;
-  padding-right: 28px;
-}
-
-.cta-copy h2,
-.cta-copy p {
+.cta-panel h2 {
+  max-width: 760px;
+  margin: 0 0 22px;
   color: var(--ivory);
+  font-size: clamp(54px, 7vw, 96px);
+  line-height: 0.98;
 }
 
-.cta-copy p {
-  color: rgba(247, 243, 236, 0.76);
+.cta-panel p:not(.eyebrow) {
+  max-width: 620px;
+  margin: 0;
+  color: rgba(247, 242, 234, 0.74);
+  font-size: 18px;
+  font-weight: 650;
 }
 
-.button-row {
+.cta-actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
+  gap: 14px;
+  margin-top: 34px;
+}
+
+.cta-actions .btn {
+  min-width: 190px;
+  justify-content: center;
 }
 
 .btn {
@@ -683,6 +695,8 @@ p {
   gap: 10px;
   padding: 13px 20px;
   border-radius: 999px;
+  border: 0;
+  cursor: pointer;
   font-weight: 900;
   transition: transform 220ms var(--ease), box-shadow 220ms ease, background 220ms ease;
 }
@@ -711,6 +725,217 @@ p {
 .btn-outline {
   border: 1px solid rgba(247, 243, 236, 0.32);
   color: var(--ivory);
+}
+
+.btn-light {
+  background: var(--ivory);
+  color: var(--charcoal);
+}
+
+.btn-outline-light {
+  border: 1px solid rgba(247, 243, 236, 0.32);
+  background: transparent;
+  color: var(--ivory);
+}
+
+.btn-outline-light:hover,
+.btn-outline-light:focus-visible {
+  background: rgba(247, 242, 234, 0.08);
+}
+
+.lead-modal-open {
+  overflow: hidden;
+}
+
+.lead-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 260ms ease;
+}
+
+.lead-modal.is-open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.lead-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  border: 0;
+  background:
+    radial-gradient(circle at 50% 18%, rgba(199, 165, 106, 0.16), transparent 32%),
+    rgba(21, 23, 22, 0.68);
+  backdrop-filter: blur(14px);
+  cursor: pointer;
+}
+
+.lead-modal-panel {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(260px, 0.75fr) minmax(320px, 1fr);
+  gap: 30px;
+  width: min(980px, 100%);
+  max-height: min(760px, calc(100vh - 48px));
+  overflow: auto;
+  padding: clamp(58px, 5vw, 72px) clamp(28px, 4vw, 46px) clamp(28px, 4vw, 46px);
+  border: 1px solid rgba(247, 243, 236, 0.18);
+  border-radius: 34px;
+  background:
+    linear-gradient(145deg, rgba(247, 243, 236, 0.12), rgba(247, 243, 236, 0.04)),
+    var(--charcoal);
+  color: var(--ivory);
+  box-shadow: 0 40px 120px rgba(0, 0, 0, 0.38);
+  transform: translateY(28px) scale(0.96);
+  transition: transform 420ms var(--ease);
+}
+
+.lead-modal.is-open .lead-modal-panel {
+  transform: translateY(0) scale(1);
+}
+
+.lead-modal-panel::before {
+  position: absolute;
+  inset: 14px;
+  z-index: -1;
+  border: 1px solid rgba(247, 243, 236, 0.08);
+  border-radius: 26px;
+  content: "";
+  pointer-events: none;
+}
+
+.lead-modal-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 3;
+  display: grid;
+  width: 44px;
+  height: 44px;
+  place-items: center;
+  border: 1px solid rgba(247, 243, 236, 0.2);
+  border-radius: 50%;
+  background: rgba(247, 243, 236, 0.1);
+  color: var(--ivory);
+  cursor: pointer;
+  font-size: 24px;
+  transition: transform 180ms var(--ease), background 180ms ease;
+}
+
+.lead-modal-close:hover {
+  background: rgba(247, 243, 236, 0.18);
+  transform: rotate(8deg) scale(1.05);
+}
+
+.lead-modal-copy {
+  align-self: center;
+  max-width: 360px;
+}
+
+.lead-modal-copy h2 {
+  margin: 0 0 18px;
+  color: var(--ivory);
+  font-size: clamp(40px, 5vw, 72px);
+  line-height: 0.96;
+}
+
+.lead-modal-copy p:not(.eyebrow) {
+  color: rgba(247, 243, 236, 0.72);
+  font-size: 16px;
+  font-weight: 650;
+  line-height: 1.7;
+}
+
+.lead-form {
+  display: grid;
+  gap: 16px;
+  width: 100%;
+  padding: 18px;
+  border: 1px solid rgba(247, 243, 236, 0.16);
+  border-radius: 28px;
+  background: rgba(247, 243, 236, 0.08);
+  backdrop-filter: blur(16px);
+}
+
+.lead-honey {
+  position: absolute;
+  top: auto;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.lead-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.lead-form label {
+  display: grid;
+  gap: 7px;
+  color: rgba(247, 243, 236, 0.68);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+}
+
+.lead-form input,
+.lead-form select,
+.lead-form textarea {
+  width: 100%;
+  min-height: 46px;
+  padding: 12px 14px;
+  border: 1px solid rgba(247, 243, 236, 0.14);
+  border-radius: 16px;
+  outline: none;
+  background: rgba(247, 243, 236, 0.9);
+  color: var(--charcoal);
+  font: inherit;
+  font-weight: 700;
+}
+
+.lead-form textarea {
+  resize: vertical;
+}
+
+.lead-form-grid label:nth-of-type(4),
+.lead-form .lead-status {
+  grid-column: 1 / -1;
+}
+
+.lead-form .btn {
+  width: 100%;
+  justify-content: center;
+}
+
+.lead-modal-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.lead-status {
+  grid-column: 1 / -1;
+  min-height: 20px;
+  color: rgba(247, 243, 236, 0.76);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.lead-status.is-error {
+  color: #ffd2c8;
+}
+
+.lead-status.is-success {
+  color: #d6f5db;
 }
 
 .site-footer {
@@ -832,16 +1057,20 @@ p {
 }
 
 .hero-image-wrap,
-.story-image,
-.cta-shell {
+.story-image {
   clip-path: inset(100% 0 0 0);
   transition: clip-path 900ms var(--ease), opacity 760ms var(--ease), transform 760ms var(--ease);
 }
 
 .hero-image-wrap.is-visible,
-.story-panel.is-visible .story-image,
-.cta-shell.is-visible {
+.story-panel.is-visible .story-image {
   clip-path: inset(0 0 0 0);
+}
+
+.about-final-cta .cta-panel {
+  clip-path: none;
+  opacity: 1;
+  transform: none;
 }
 
 .trust-card {
@@ -910,12 +1139,12 @@ p {
     max-width: 640px;
   }
 
-  .cta-shell {
+  .lead-modal-panel {
     grid-template-columns: 1fr;
   }
 
-  .cta-copy {
-    padding: 0 6px 8px;
+  .lead-modal-copy {
+    max-width: 100%;
   }
 }
 
@@ -983,14 +1212,12 @@ p {
     grid-template-columns: 1fr;
   }
 
-  .story-panel,
-  .cta-shell {
+  .story-panel {
     padding: 16px;
     border-radius: 26px;
   }
 
-  .story-image,
-  .cta-image {
+  .story-image {
     height: 340px;
   }
 
@@ -1000,9 +1227,44 @@ p {
 
   .story-copy h2,
   .difference-copy h2,
-  .section-head h2,
-  .cta-copy h2 {
+  .section-head h2 {
     font-size: clamp(36px, 11vw, 48px);
+  }
+
+  .cta-panel {
+    padding: 34px 24px;
+    border-radius: 28px;
+  }
+
+  .cta-panel h2 {
+    font-size: clamp(40px, 12vw, 56px);
+  }
+
+  .cta-actions,
+  .lead-form-grid,
+  .lead-modal-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .cta-actions .btn,
+  .lead-modal-actions .btn {
+    width: 100%;
+  }
+
+  .lead-modal {
+    align-items: end;
+    padding: 12px;
+  }
+
+  .lead-modal-panel {
+    max-height: calc(100vh - 24px);
+    padding: 58px 18px 22px;
+    border-radius: 28px;
+  }
+
+  .lead-modal-copy h2 {
+    font-size: 38px;
   }
 
   .principles-grid article {
@@ -1041,7 +1303,7 @@ p {
   .mask-heading span,
   .hero-image-wrap,
   .story-image,
-  .cta-shell,
+  .cta-panel,
   .trust-card {
     clip-path: none !important;
     opacity: 1 !important;

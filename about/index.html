@@ -23,7 +23,7 @@
         <a href="../projects/index.html">Projects</a>
         <a href="../katalog/index.html">Katalog</a>
       </nav>
-      <a class="nav-cta" href="../index.html#contact">Book Consultation</a>
+      <a class="nav-cta" href="#contact">Book Consultation</a>
     </header>
 
     <main id="main">
@@ -205,25 +205,72 @@
         </div>
       </section>
 
-      <section class="about-final-cta section-pad" aria-labelledby="about-cta-title">
-        <div class="container cta-shell" data-reveal>
-          <div class="cta-image">
-            <img src="../assets/images/hero-kitchen-living.webp" alt="Premium kitchen set interior by Kediamanku" width="1536" height="1024" loading="lazy">
-          </div>
-          <div class="cta-copy">
-            <span class="section-label">Start your project</span>
-            <h2 id="about-cta-title">Ready to create a home that feels truly yours?</h2>
+      <section class="about-final-cta final-cta section-pad" id="contact" aria-labelledby="about-cta-title">
+        <div class="container cta-panel" data-reveal>
+          <div>
+            <p class="eyebrow">Start Your Interior Project with Kediamanku</p>
+            <h2 id="about-cta-title">Ready to transform your home?</h2>
             <p>
-              Start your custom interior journey with Kediamanku - from consultation and design proposal to production and installation.
+              Start your interior journey with Kediamanku - from idea, design, production, to installation.
             </p>
-            <div class="button-row">
-              <a class="btn btn-dark" href="../index.html#contact">Book Consultation <span aria-hidden="true">&rarr;</span></a>
-              <a class="btn btn-outline" href="../projects/index.html">View Projects <span aria-hidden="true">&nearr;</span></a>
+            <div class="cta-actions">
+              <button class="btn btn-light" type="button" data-open-lead-modal>Book Consultation <span aria-hidden="true">&rarr;</span></button>
+              <a class="btn btn-outline-light" href="../projects/index.html">View Projects</a>
             </div>
           </div>
         </div>
       </section>
     </main>
+
+    <div class="lead-modal" aria-hidden="true" data-lead-modal>
+      <button class="lead-modal-backdrop" type="button" aria-label="Close consultation form" data-close-lead-modal></button>
+      <article class="lead-modal-panel" role="dialog" aria-modal="true" aria-labelledby="lead-modal-title" aria-describedby="lead-modal-copy">
+        <button class="lead-modal-close" type="button" aria-label="Close consultation form" data-close-lead-modal>&times;</button>
+        <div class="lead-modal-copy">
+          <p class="eyebrow">Start Your Interior Project</p>
+          <h2 id="lead-modal-title">Tell us about your home.</h2>
+          <p id="lead-modal-copy">
+            Share your room, service needs, and contact details. Kediamanku will review your inquiry and guide the next step.
+          </p>
+        </div>
+        <form class="lead-form" data-lead-form>
+          <label class="lead-honey" aria-hidden="true">
+            <span>Website</span>
+            <input name="website" tabindex="-1" autocomplete="off">
+          </label>
+          <input type="hidden" name="form_started_at" data-form-started-at>
+          <div class="lead-form-grid">
+            <label>
+              <span>Name</span>
+              <input name="name" placeholder="Your name" required>
+            </label>
+            <label>
+              <span>Phone / WhatsApp</span>
+              <input name="phone" placeholder="+62..." required>
+            </label>
+            <label>
+              <span>Service</span>
+              <select name="service_interest">
+                <option>Kitchen Set</option>
+                <option>Lemari Custom</option>
+                <option>Kamar Interior</option>
+                <option>Kamar Anak</option>
+                <option>General Consultation</option>
+              </select>
+            </label>
+            <label>
+              <span>Message</span>
+              <textarea name="message" rows="3" placeholder="Tell us about your room"></textarea>
+            </label>
+          </div>
+          <div class="lead-modal-actions">
+            <button class="btn btn-light" type="submit">Book Consultation <span aria-hidden="true">&rarr;</span></button>
+            <a class="btn btn-outline-light" href="../projects/index.html">View Projects</a>
+            <p class="lead-status" data-lead-status role="status"></p>
+          </div>
+        </form>
+      </article>
+    </div>
 
     <footer class="site-footer">
       <div class="container footer-grid">
@@ -254,8 +301,8 @@
 
         <div>
           <h2>Contact</h2>
-          <a href="../index.html#contact">Book Consultation</a>
-          <a href="../index.html#contact">Project Inquiry</a>
+          <a href="#contact">Book Consultation</a>
+          <a href="#contact">Project Inquiry</a>
           <a href="#" aria-label="Kediamanku Instagram">Instagram</a>
           <a href="#" aria-label="Kediamanku social media">Social Media</a>
         </div>

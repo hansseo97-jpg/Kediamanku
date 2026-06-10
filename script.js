@@ -337,6 +337,7 @@ function escapeHtml(value) {
 
 function mapHomeProject(row) {
   const id = row.slug || row.id;
+  const detailSlug = row.slug || row.id || "";
   return {
     id,
     title: row.title,
@@ -349,6 +350,9 @@ function mapHomeProject(row) {
     materials: row.materials || "-",
     image: resolveHomeImagePath(row.image_url),
     alt: row.image_alt || `${row.title} project by Kediamanku`,
+    detailUrl: detailSlug
+      ? `projects/detail/index.html?slug=${encodeURIComponent(detailSlug)}`
+      : "projects/index.html",
     features: [
       row.area_scope || "Designed around the homeowner's space and daily function.",
       row.materials || "Material and finishing direction selected with care.",
@@ -387,7 +391,7 @@ function createHomeProjectCard(project) {
   const article = document.createElement("article");
   article.className = "project-showcase-card";
   article.innerHTML = `
-    <button class="project-card-button" type="button" data-project-trigger="${escapeHtml(project.id)}" aria-label="Open ${escapeHtml(project.title)} project details">
+    <a class="project-card-button" href="${escapeHtml(project.detailUrl)}" aria-label="View ${escapeHtml(project.title)} project detail">
       <img src="${escapeHtml(project.image)}" alt="${escapeHtml(project.alt)}" loading="lazy" width="1200" height="900">
       <div class="project-info-bar">
         <div>
@@ -396,7 +400,7 @@ function createHomeProjectCard(project) {
         </div>
         <span class="project-arrow" aria-hidden="true">&nearr;</span>
       </div>
-    </button>
+    </a>
   `;
   return article;
 }

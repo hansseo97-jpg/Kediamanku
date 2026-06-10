@@ -3,12 +3,176 @@ const statSection = document.querySelector("[data-stats]");
 const statNumbers = document.querySelectorAll("[data-count]");
 const parallaxImages = document.querySelectorAll("[data-parallax]");
 const teamGrid = document.querySelector("[data-team-grid]");
+const leadModal = document.querySelector("[data-lead-modal]");
+const openLeadModalButtons = document.querySelectorAll("[data-open-lead-modal]");
+const closeLeadModalButtons = document.querySelectorAll("[data-close-lead-modal]");
+const leadForm = document.querySelector("[data-lead-form]");
+const leadStatus = document.querySelector("[data-lead-status]");
+const leadStartedInput = document.querySelector("[data-form-started-at]");
 const supabaseConfig = window.KEDIAMANKU_SUPABASE || {};
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+let lastLeadTrigger = null;
+let leadFormStartedAt = "";
 
 function revealElement(element) {
   element.classList.add("is-visible");
 }
+
+function setLeadStatus(message, type = "") {
+  if (!leadStatus) return;
+  leadStatus.textContent = message;
+  leadStatus.classList.toggle("is-error", type === "error");
+  leadStatus.classList.toggle("is-success", type === "success");
+}
+
+function markLeadFormStarted() {
+  leadFormStartedAt = new Date().toISOString();
+  if (leadStartedInput) {
+    leadStartedInput.value = leadFormStartedAt;
+  }
+}
+
+function openLeadModal(trigger) {
+  if (!leadModal) return;
+  lastLeadTrigger = trigger || document.activeElement;
+  markLeadFormStarted();
+  leadModal.classList.add("is-open");
+  leadModal.setAttribute("aria-hidden", "false");
+  document.body.classList.add("lead-modal-open");
+  setLeadStatus("");
+
+  window.setTimeout(() => {
+    leadModal.querySelector('input[name="name"]')?.focus();
+  }, 180);
+}
+
+function closeLeadModal() {
+  if (!leadModal) return;
+  leadModal.classList.remove("is-open");
+  leadModal.setAttribute("aria-hidden", "true");
+  document.body.classList.remove("lead-modal-open");
+  lastLeadTrigger?.focus?.({ preventScroll: true });
+}
+
+function keepLeadModalFocus(event) {
+  if (!leadModal?.classList.contains("is-open") || event.key !== "Tab") return;
+
+  const focusable = [...leadModal.querySelectorAll("button, a, input, select, textarea")]
+    .filter((element) => !element.disabled && element.tabIndex !== -1 && element.offsetParent !== null);
+  const first = focusable[0];
+  const last = focusable[focusable.length - 1];
+
+  if (!first || !last) return;
+
+  if (event.shiftKey && document.activeElement === first) {
+    event.preventDefault();
+    last.focus();
+  } else if (!event.shiftKey && document.activeElement === last) {
+    event.preventDefault();
+    first.focus();
+  }
+}
+
+function hasSupabaseLeadConfig() {
+  return Boolean(
+    supabaseConfig.restUrl &&
+    supabaseConfig.anonKey &&
+    !supabaseConfig.anonKey.includes("PASTE_SUPABASE_ANON_PUBLIC_KEY_HERE")
+  );
+}
+
+if (leadForm) {
+  leadForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    if (!hasSupabaseLeadConfig()) {
+      setLeadStatus("Supabase belum dikonfigurasi. Hubungi Kediamanku lewat kontak utama dulu.", "error");
+      return;
+    }
+
+    const formData = new FormData(leadForm);
+    const startedAt = formData.get("form_started_at") || leadFormStartedAt;
+    const honeypot = String(formData.get("website") || "").trim();
+
+    if (honeypot) {
+      setLeadStatus("Thank you. Your inquiry has been received.", "success");
+      window.setTimeout(closeLeadModal, 900);
+      return;
+    }
+
+    if (!startedAt || Date.now() - Date.parse(startedAt) < 3000) {
+      setLeadStatus("Please wait a moment before submitting.", "error");
+      return;
+    }
+
+    const payload = {
+      name: String(formData.get("name") || "").trim(),
+      phone: String(formData.get("phone") || "").trim(),
+      service_interest: formData.get("service_interest"),
+      message: String(formData.get("message") || "").trim(),
+      source: "about-page",
+      website: honeypot,
+      form_started_at: startedAt,
+      user_agent: navigator.userAgent.slice(0, 240),
+    };
+
+    try {
+      setLeadStatus("Sending your project inquiry...");
+      const response = await fetch(`${supabaseConfig.restUrl}/leads`, {
+        method: "POST",
+        headers: {
+          apikey: supabaseConfig.anonKey,
+          Authorization: `Bearer ${supabaseConfig.anonKey}`,
+          "Content-Type": "application/json",
+          Prefer: "return=minimal",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Lead request failed: ${response.status}`);
+      }
+
+      leadForm.reset();
+      markLeadFormStarted();
+      setLeadStatus("Thank you. Your inquiry has been saved and will be reviewed.", "success");
+      window.setTimeout(closeLeadModal, 1300);
+    } catch (error) {
+      console.warn(error);
+      setLeadStatus("Inquiry could not be saved yet. Please try again later.", "error");
+    }
+  });
+}
+
+openLeadModalButtons.forEach((button) => {
+  button.addEventListener("click", () => openLeadModal(button));
+});
+
+document.addEventListener("click", (event) => {
+  const link = event.target.closest('a[href="#contact"]');
+  if (!link || !leadModal) return;
+
+  event.preventDefault();
+  history.replaceState(null, "", "#contact");
+  document.querySelector("#contact")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  window.setTimeout(() => openLeadModal(link), 260);
+});
+
+closeLeadModalButtons.forEach((button) => {
+  button.addEventListener("click", closeLeadModal);
+});
+
+if (window.location.hash === "#contact" && leadModal) {
+  window.setTimeout(() => openLeadModal(), 450);
+}
+
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && leadModal?.classList.contains("is-open")) {
+    closeLeadModal();
+  }
+
+  keepLeadModalFocus(event);
+});
 
 if ("IntersectionObserver" in window) {
   const revealObserver = new IntersectionObserver(
