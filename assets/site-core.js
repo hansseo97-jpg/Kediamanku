@@ -278,7 +278,6 @@
     mobile.className = "global-mobile-cta";
     mobile.innerHTML = `
       <a href="${whatsappUrl()}" target="_blank" rel="noopener">WhatsApp</a>
-      <button type="button" data-book-consultation>Book Consultation</button>
     `;
 
     document.body.append(whatsApp, mobile);
