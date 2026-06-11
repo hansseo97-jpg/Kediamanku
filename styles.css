@@ -334,34 +334,51 @@ h3 {
 }
 
 .menu-toggle {
+  position: relative;
   display: none;
   width: 48px;
   height: 48px;
   place-items: center;
-  border: 1px solid rgba(48, 57, 64, 0.16);
+  border: 1px solid rgba(48, 57, 64, 0.18);
   border-radius: 999px;
-  background: var(--ivory);
+  background: var(--ivory-soft);
   cursor: pointer;
+  box-shadow: 0 10px 26px rgba(21, 23, 22, 0.08);
+  transition: background 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
 }
 
 .menu-toggle span {
+  position: absolute;
+  top: 50%;
+  left: 50%;
   display: block;
-  width: 18px;
-  height: 2px;
-  background: var(--charcoal);
-  transition: transform 180ms ease;
+  width: 21px;
+  height: 2.5px;
+  border-radius: 999px;
+  background: var(--charcoal-deep);
+  transform: translate(-50%, -50%) translateY(-5px);
+  transition: transform 180ms ease, background 180ms ease;
 }
 
 .menu-toggle span + span {
-  margin-top: -12px;
+  margin-top: 0;
+  transform: translate(-50%, -50%) translateY(5px);
+}
+
+.menu-toggle.is-open {
+  border-color: rgba(21, 23, 22, 0.2);
+  background: #fffaf2;
+  box-shadow: 0 14px 34px rgba(21, 23, 22, 0.16);
 }
 
 .menu-toggle.is-open span:first-child {
-  transform: rotate(45deg) translate(4px, 4px);
+  background: #151716;
+  transform: translate(-50%, -50%) rotate(45deg);
 }
 
 .menu-toggle.is-open span:last-child {
-  transform: rotate(-45deg) translate(4px, -4px);
+  background: #151716;
+  transform: translate(-50%, -50%) rotate(-45deg);
 }
 
 .mobile-menu {
@@ -3284,9 +3301,12 @@ body.project-modal-open {
 
   .site-header {
     top: 12px;
+    z-index: 120;
   }
 
   .header-shell {
+    grid-template-columns: auto minmax(0, 1fr) auto auto;
+    gap: 8px;
     width: calc(100% - 28px);
     min-height: 62px;
     padding: 8px;
@@ -3297,7 +3317,24 @@ body.project-modal-open {
   }
 
   .header-cta {
-    display: none;
+    grid-column: 4;
+    display: inline-flex;
+    min-height: 44px;
+    padding: 10px 14px;
+    font-size: 12px;
+    justify-self: end;
+    white-space: nowrap;
+  }
+
+  .menu-toggle {
+    z-index: 130;
+    grid-column: 3;
+    width: 44px;
+    height: 44px;
+  }
+
+  .mobile-menu {
+    z-index: 90;
   }
 
   .hero {
