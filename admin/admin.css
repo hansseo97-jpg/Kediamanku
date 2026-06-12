@@ -45,6 +45,10 @@ body {
   font-family: var(--body);
 }
 
+body.is-editor-open {
+  overflow: hidden;
+}
+
 button,
 input,
 select,
@@ -208,6 +212,24 @@ textarea {
   color: var(--charcoal);
   padding: 14px 16px;
   outline: none;
+  transition: border-color 180ms ease, box-shadow 180ms ease, background 180ms ease;
+}
+
+input[type="file"] {
+  cursor: pointer;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.82), rgba(247, 243, 236, 0.72));
+}
+
+input[type="file"]::file-selector-button {
+  margin-right: 12px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--charcoal);
+  color: var(--ivory);
+  padding: 10px 14px;
+  cursor: pointer;
+  font-weight: 900;
 }
 
 textarea {
@@ -281,6 +303,11 @@ textarea:focus {
   margin-bottom: 22px;
 }
 
+.dashboard-top > a,
+.dashboard-top > button {
+  flex-shrink: 0;
+}
+
 .admin-tabs {
   display: flex;
   gap: 10px;
@@ -289,6 +316,11 @@ textarea:focus {
   border: 1px solid var(--line);
   border-radius: 999px;
   background: rgba(247, 243, 236, 0.6);
+  scrollbar-width: none;
+}
+
+.admin-tabs::-webkit-scrollbar {
+  display: none;
 }
 
 .admin-tabs button {
@@ -315,6 +347,7 @@ textarea:focus {
   display: none;
   margin-top: 20px;
   padding: 26px;
+  overflow: hidden;
 }
 
 .admin-panel.is-active {
@@ -337,11 +370,21 @@ textarea:focus {
 
 .admin-form {
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 14px;
-  padding: 20px;
+  gap: 16px;
+  padding: 22px;
   border-top: 1px solid var(--line);
   border-radius: 24px;
-  background: rgba(247, 243, 236, 0.46);
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.46), rgba(247, 243, 236, 0.7)),
+    rgba(247, 243, 236, 0.46);
+}
+
+.admin-form label {
+  min-width: 0;
+}
+
+.admin-form textarea {
+  min-height: 116px;
 }
 
 .span-2 {
@@ -389,6 +432,176 @@ textarea:focus {
   color: var(--taupe);
   font-size: 13px;
   font-weight: 800;
+}
+
+.image-preview {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  width: 100%;
+}
+
+.image-preview:empty {
+  display: none;
+}
+
+.image-preview-button {
+  position: relative;
+  display: grid;
+  min-width: 0;
+  border: 0;
+  border-radius: 16px;
+  padding: 0;
+  background: rgba(48, 58, 66, 0.08);
+  cursor: pointer;
+  overflow: hidden;
+  box-shadow: 0 10px 28px rgba(21, 23, 22, 0.08);
+}
+
+.image-preview-button::after {
+  content: "Edit";
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  border-radius: 999px;
+  background: rgba(21, 23, 22, 0.78);
+  color: var(--ivory);
+  padding: 5px 9px;
+  font-size: 11px;
+  font-weight: 900;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 180ms ease, transform 180ms ease;
+}
+
+.image-preview-button:hover::after,
+.image-preview-button:focus-visible::after {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.image-preview img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border: 1px solid rgba(48, 58, 66, 0.12);
+  border-radius: 14px;
+  object-fit: cover;
+}
+
+.image-preview-button img {
+  border: 0;
+  border-radius: 16px;
+}
+
+.image-editor {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+}
+
+.image-editor[hidden] {
+  display: none;
+}
+
+.image-editor-backdrop {
+  position: absolute;
+  inset: 0;
+  border: 0;
+  background:
+    radial-gradient(circle at 50% 20%, rgba(199, 165, 106, 0.18), transparent 34%),
+    rgba(21, 23, 22, 0.62);
+  backdrop-filter: blur(16px);
+  cursor: default;
+}
+
+.image-editor-panel {
+  position: relative;
+  z-index: 1;
+  width: min(980px, 100%);
+  max-height: min(92vh, 920px);
+  display: grid;
+  grid-template-rows: auto minmax(220px, 1fr) auto;
+  gap: 18px;
+  border: 1px solid rgba(247, 243, 236, 0.28);
+  border-radius: 32px;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.88), rgba(247, 243, 236, 0.78)),
+    var(--ivory);
+  box-shadow: 0 40px 120px rgba(21, 23, 22, 0.38);
+  padding: 22px;
+  overflow: hidden;
+}
+
+.image-editor-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.image-editor-head h2 {
+  font-family: var(--display);
+  font-size: clamp(28px, 4vw, 48px);
+  line-height: 1;
+}
+
+.image-editor-close {
+  width: 46px;
+  height: 46px;
+  border: 1px solid rgba(48, 58, 66, 0.14);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.74);
+  color: var(--charcoal);
+  cursor: pointer;
+  font-size: 28px;
+  line-height: 1;
+}
+
+.image-editor-stage {
+  display: grid;
+  place-items: center;
+  min-height: 280px;
+  border: 1px solid rgba(48, 58, 66, 0.12);
+  border-radius: 24px;
+  background:
+    linear-gradient(45deg, rgba(48, 58, 66, 0.06) 25%, transparent 25%),
+    linear-gradient(-45deg, rgba(48, 58, 66, 0.06) 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, rgba(48, 58, 66, 0.06) 75%),
+    linear-gradient(-45deg, transparent 75%, rgba(48, 58, 66, 0.06) 75%),
+    rgba(255, 255, 255, 0.58);
+  background-size: 28px 28px;
+  background-position: 0 0, 0 14px, 14px -14px, -14px 0;
+  overflow: auto;
+}
+
+.image-editor-stage canvas {
+  display: block;
+  width: min(100%, 900px);
+  height: auto;
+  border-radius: 18px;
+  box-shadow: 0 22px 70px rgba(21, 23, 22, 0.16);
+  cursor: grab;
+  touch-action: none;
+}
+
+.image-editor-stage canvas:active {
+  cursor: grabbing;
+}
+
+.image-editor-controls {
+  display: grid;
+  grid-template-columns: 1.1fr 1.4fr repeat(4, auto);
+  gap: 12px;
+  align-items: end;
+}
+
+.image-editor-controls .btn-primary,
+.image-editor-controls .btn-secondary {
+  min-height: 52px;
+  white-space: nowrap;
 }
 
 .list-actions {
@@ -493,6 +706,7 @@ td {
 
   .admin-form {
     grid-template-columns: 1fr;
+    padding: 16px;
   }
 
   .list-item {
@@ -507,5 +721,38 @@ td {
 
   .span-2 {
     grid-column: auto;
+  }
+
+  .dashboard {
+    padding: 14px;
+    border-radius: 24px;
+  }
+
+  .admin-panel {
+    padding: 16px;
+    border-radius: 24px;
+  }
+
+  .image-preview {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .image-editor {
+    padding: 12px;
+  }
+
+  .image-editor-panel {
+    max-height: 94vh;
+    border-radius: 24px;
+    padding: 16px;
+  }
+
+  .image-editor-controls {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .image-editor-controls .btn-primary,
+  .image-editor-controls .btn-secondary {
+    width: 100%;
   }
 }

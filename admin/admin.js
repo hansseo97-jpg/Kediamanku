@@ -29,6 +29,18 @@ const logoutButton = document.querySelector("[data-logout]");
 const tabButtons = [...document.querySelectorAll("[data-tab]")];
 const panels = [...document.querySelectorAll("[data-panel]")];
 const leadsList = document.querySelector("[data-leads-list]");
+const imageEditor = document.querySelector("[data-image-editor]");
+const editorCanvas = document.querySelector("[data-editor-canvas]");
+const editorAspect = document.querySelector("[data-editor-aspect]");
+const editorZoom = document.querySelector("[data-editor-zoom]");
+const editorFlipX = document.querySelector("[data-editor-flip-x]");
+const editorFlipY = document.querySelector("[data-editor-flip-y]");
+const editorReset = document.querySelector("[data-editor-reset]");
+const editorApply = document.querySelector("[data-editor-apply]");
+const editorCloseButtons = [...document.querySelectorAll("[data-editor-close]")];
+let activeImageEdit = null;
+let activeEditorDrag = null;
+let latestEditorCrop = null;
 
 const tableConfig = {
   catalog_products: {
@@ -195,6 +207,268 @@ function createElement(tag, className, text) {
   return element;
 }
 
+function clearImagePreviews(form) {
+  form?.querySelectorAll(".image-preview").forEach((preview) => {
+    preview.replaceChildren();
+  });
+}
+
+function loadImageFromFile(file) {
+  return new Promise((resolve, reject) => {
+    const url = URL.createObjectURL(file);
+    const image = new Image();
+    image.onload = () => {
+      URL.revokeObjectURL(url);
+      resolve(image);
+    };
+    image.onerror = () => {
+      URL.revokeObjectURL(url);
+      reject(new Error("Gambar tidak bisa dibuka."));
+    };
+    image.src = url;
+  });
+}
+
+function drawImageEditor() {
+  if (!activeImageEdit || !editorCanvas) return;
+
+  const { image, aspect, zoom, flipX, flipY } = activeImageEdit;
+  const targetAspect = aspect === "original" ? image.width / image.height : Number(aspect);
+  const outputWidth = targetAspect < 1 ? 1000 : 1400;
+  const outputHeight = Math.max(1, Math.round(outputWidth / targetAspect));
+  const imageAspect = image.width / image.height;
+
+  editorCanvas.width = outputWidth;
+  editorCanvas.height = outputHeight;
+
+  let sourceWidth;
+  let sourceHeight;
+  if (imageAspect > targetAspect) {
+    sourceHeight = image.height / zoom;
+    sourceWidth = sourceHeight * targetAspect;
+  } else {
+    sourceWidth = image.width / zoom;
+    sourceHeight = sourceWidth / targetAspect;
+  }
+
+  const maxSourceX = Math.max(0, image.width - sourceWidth);
+  const maxSourceY = Math.max(0, image.height - sourceHeight);
+  activeImageEdit.offsetX = Math.min(1, Math.max(0, activeImageEdit.offsetX ?? 0.5));
+  activeImageEdit.offsetY = Math.min(1, Math.max(0, activeImageEdit.offsetY ?? 0.5));
+  const sourceX = maxSourceX * activeImageEdit.offsetX;
+  const sourceY = maxSourceY * activeImageEdit.offsetY;
+  latestEditorCrop = {
+    sourceWidth,
+    sourceHeight,
+    maxSourceX,
+    maxSourceY,
+  };
+  const context = editorCanvas.getContext("2d");
+  context.clearRect(0, 0, outputWidth, outputHeight);
+  context.save();
+  context.translate(flipX ? outputWidth : 0, flipY ? outputHeight : 0);
+  context.scale(flipX ? -1 : 1, flipY ? -1 : 1);
+  context.drawImage(image, sourceX, sourceY, sourceWidth, sourceHeight, 0, 0, outputWidth, outputHeight);
+  context.restore();
+}
+
+async function openImageEditor(input, index) {
+  if (!imageEditor || !editorCanvas) return;
+  const file = [...(input.files || [])][index];
+  if (!file || !file.type.startsWith("image/")) return;
+
+  try {
+    const image = await loadImageFromFile(file);
+    activeImageEdit = {
+      input,
+      index,
+      file,
+      image,
+      aspect: "original",
+      zoom: 1,
+      flipX: false,
+      flipY: false,
+      offsetX: 0.5,
+      offsetY: 0.5,
+    };
+    if (editorAspect) editorAspect.value = "original";
+    if (editorZoom) editorZoom.value = "1";
+    imageEditor.hidden = false;
+    document.body.classList.add("is-editor-open");
+    drawImageEditor();
+  } catch (error) {
+    setStatus(globalStatus, error.message, "error");
+  }
+}
+
+function closeImageEditor() {
+  if (!imageEditor) return;
+  imageEditor.hidden = true;
+  document.body.classList.remove("is-editor-open");
+  activeImageEdit = null;
+  activeEditorDrag = null;
+}
+
+function canvasToBlob(canvas, type = "image/webp", quality = 0.9) {
+  return new Promise((resolve, reject) => {
+    canvas.toBlob((blob) => {
+      if (blob) resolve(blob);
+      else reject(new Error("Gagal membuat hasil edit gambar."));
+    }, type, quality);
+  });
+}
+
+function editedImageName(file) {
+  const base = file.name.replace(/\.[^.]+$/, "") || "kediamanku-image";
+  return `${base}-edited.webp`;
+}
+
+function replaceInputFile(input, index, editedFile) {
+  const files = [...(input.files || [])];
+  const transfer = new DataTransfer();
+  files.forEach((file, fileIndex) => {
+    transfer.items.add(fileIndex === index ? editedFile : file);
+  });
+  input.files = transfer.files;
+  input.dispatchEvent(new Event("change", { bubbles: true }));
+}
+
+function renderImagePreviews(input) {
+  const preview = input.closest("label")?.querySelector(".image-preview");
+  if (!preview) return;
+
+  preview.replaceChildren();
+  const files = [...(input.files || [])].slice(0, 12);
+  files.forEach((file, index) => {
+    const button = document.createElement("button");
+    const image = document.createElement("img");
+    const url = URL.createObjectURL(file);
+    button.type = "button";
+    button.className = "image-preview-button";
+    button.setAttribute("aria-label", `Edit ${file.name}`);
+    image.src = url;
+    image.alt = `Preview of ${file.name}`;
+    image.onload = () => URL.revokeObjectURL(url);
+    button.append(image);
+    button.addEventListener("click", () => openImageEditor(input, index));
+    preview.append(button);
+  });
+}
+
+function setupImagePreviews() {
+  document.querySelectorAll('input[type="file"][accept*="image"]').forEach((input) => {
+    if (input.dataset.previewReady === "true") return;
+    input.dataset.previewReady = "true";
+    let preview = input.closest("label")?.querySelector(".image-preview");
+    if (!preview) {
+      preview = createElement("div", "image-preview");
+      input.closest("label")?.append(preview);
+    }
+    input.addEventListener("change", () => renderImagePreviews(input));
+  });
+}
+
+function setupImageEditor() {
+  if (!imageEditor || !editorCanvas) return;
+
+  editorAspect?.addEventListener("change", () => {
+    if (!activeImageEdit) return;
+    activeImageEdit.aspect = editorAspect.value;
+    drawImageEditor();
+  });
+
+  editorZoom?.addEventListener("input", () => {
+    if (!activeImageEdit) return;
+    activeImageEdit.zoom = Number(editorZoom.value) || 1;
+    drawImageEditor();
+  });
+
+  editorFlipX?.addEventListener("click", () => {
+    if (!activeImageEdit) return;
+    activeImageEdit.flipX = !activeImageEdit.flipX;
+    drawImageEditor();
+  });
+
+  editorFlipY?.addEventListener("click", () => {
+    if (!activeImageEdit) return;
+    activeImageEdit.flipY = !activeImageEdit.flipY;
+    drawImageEditor();
+  });
+
+  editorReset?.addEventListener("click", () => {
+    if (!activeImageEdit) return;
+    activeImageEdit.aspect = "original";
+    activeImageEdit.zoom = 1;
+      activeImageEdit.flipX = false;
+      activeImageEdit.flipY = false;
+      activeImageEdit.offsetX = 0.5;
+      activeImageEdit.offsetY = 0.5;
+    if (editorAspect) editorAspect.value = "original";
+    if (editorZoom) editorZoom.value = "1";
+    drawImageEditor();
+  });
+
+  editorApply?.addEventListener("click", async () => {
+    if (!activeImageEdit) return;
+    try {
+      const blob = await canvasToBlob(editorCanvas);
+      const editedFile = new File([blob], editedImageName(activeImageEdit.file), {
+        type: "image/webp",
+        lastModified: Date.now(),
+      });
+      replaceInputFile(activeImageEdit.input, activeImageEdit.index, editedFile);
+      closeImageEditor();
+      setStatus(globalStatus, "Gambar berhasil diedit dan siap di-upload.", "success");
+    } catch (error) {
+      setStatus(globalStatus, error.message, "error");
+    }
+  });
+
+  editorCanvas.addEventListener("pointerdown", (event) => {
+    if (!activeImageEdit || !latestEditorCrop) return;
+    editorCanvas.setPointerCapture(event.pointerId);
+    activeEditorDrag = {
+      pointerId: event.pointerId,
+      startX: event.clientX,
+      startY: event.clientY,
+      startOffsetX: activeImageEdit.offsetX ?? 0.5,
+      startOffsetY: activeImageEdit.offsetY ?? 0.5,
+    };
+  });
+
+  editorCanvas.addEventListener("pointermove", (event) => {
+    if (!activeImageEdit || !activeEditorDrag || activeEditorDrag.pointerId !== event.pointerId || !latestEditorCrop) return;
+    const rect = editorCanvas.getBoundingClientRect();
+    const deltaX = -((event.clientX - activeEditorDrag.startX) * latestEditorCrop.sourceWidth) / rect.width;
+    const deltaY = -((event.clientY - activeEditorDrag.startY) * latestEditorCrop.sourceHeight) / rect.height;
+    const startSourceX = activeEditorDrag.startOffsetX * latestEditorCrop.maxSourceX;
+    const startSourceY = activeEditorDrag.startOffsetY * latestEditorCrop.maxSourceY;
+    const nextSourceX = Math.min(latestEditorCrop.maxSourceX, Math.max(0, startSourceX + deltaX));
+    const nextSourceY = Math.min(latestEditorCrop.maxSourceY, Math.max(0, startSourceY + deltaY));
+    activeImageEdit.offsetX = latestEditorCrop.maxSourceX ? nextSourceX / latestEditorCrop.maxSourceX : 0.5;
+    activeImageEdit.offsetY = latestEditorCrop.maxSourceY ? nextSourceY / latestEditorCrop.maxSourceY : 0.5;
+    drawImageEditor();
+  });
+
+  ["pointerup", "pointercancel", "pointerleave"].forEach((eventName) => {
+    editorCanvas.addEventListener(eventName, (event) => {
+      if (activeEditorDrag?.pointerId === event.pointerId) {
+        activeEditorDrag = null;
+      }
+    });
+  });
+
+  editorCloseButtons.forEach((button) => {
+    button.addEventListener("click", closeImageEditor);
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && !imageEditor.hidden) {
+      closeImageEditor();
+    }
+  });
+}
+
 function setSubmitLabel(form, label) {
   const button = form?.querySelector('button[type="submit"]');
   if (!button) return;
@@ -235,6 +509,7 @@ function resetManagedForm(table) {
   config.form.querySelectorAll('[name="is_published"]').forEach((input) => {
     input.checked = true;
   });
+  clearImagePreviews(config.form);
   setEditMode(table, null);
 }
 
@@ -250,8 +525,8 @@ function fileExtension(file) {
   return mimeMap[file.type] || "webp";
 }
 
-async function uploadImageFile(form, folder, baseName) {
-  const fileInput = form.querySelector('[name="image_file"]');
+async function uploadImageFile(form, folder, baseName, inputName = "image_file") {
+  const fileInput = form.querySelector(`[name="${inputName}"]`);
   const file = fileInput?.files?.[0];
 
   if (!file) return null;
@@ -338,8 +613,18 @@ function storagePathFromPublicUrl(value) {
 }
 
 function collectStoragePaths(row) {
-  const urls = [row?.image_url, ...(Array.isArray(row?.images) ? row.images : [])];
+  const urls = [
+    row?.image_url,
+    row?.testimonial_image_url,
+    ...(Array.isArray(row?.images) ? row.images : []),
+  ];
   return uniqueValues(urls.map(storagePathFromPublicUrl));
+}
+
+function storageSelectForTable(table) {
+  if (table === "catalog_products") return "image_url,images";
+  if (table === "projects") return "image_url,testimonial_image_url";
+  return "image_url";
 }
 
 async function deleteStorageFilesForRow(row) {
@@ -472,7 +757,7 @@ async function saveRow(table, payload, form) {
 
   let previousRowForStorage = null;
   if (editId) {
-    const storageSelect = table === "catalog_products" ? "image_url,images" : "image_url";
+    const storageSelect = storageSelectForTable(table);
     const { data: previousRow, error: previousRowError } = await supabaseClient
       .from(table)
       .select(storageSelect)
@@ -585,6 +870,7 @@ document.querySelector("[data-testimonial-form]").addEventListener("submit", asy
   const form = event.currentTarget;
   const data = formPayload(form);
   let uploadedImageUrl = null;
+  let uploadedTestimonialImageUrl = null;
   let payload = null;
 
   try {
@@ -641,6 +927,7 @@ document.querySelector("[data-project-form]").addEventListener("submit", async (
 
     setStatus(globalStatus, "Uploading image...");
     uploadedImageUrl = await uploadImageFile(form, "projects", title);
+    uploadedTestimonialImageUrl = await uploadImageFile(form, "projects/clients", `${title}-client`, "testimonial_image_file");
 
     payload = {
       slug: form.dataset.editSlug || uniqueSlug(title),
@@ -658,7 +945,7 @@ document.querySelector("[data-project-form]").addEventListener("submit", async (
       testimonial_quote: nullable(data.testimonial_quote),
       testimonial_client_name: nullable(data.testimonial_client_name),
       testimonial_client_role: nullable(data.testimonial_client_role),
-      testimonial_image_url: testimonialImageUrl,
+      testimonial_image_url: uploadedTestimonialImageUrl || testimonialImageUrl,
       is_featured: checked(form, "is_featured"),
       is_published: checked(form, "is_published"),
       sort_order: numberOrDefault(data.sort_order),
@@ -893,7 +1180,7 @@ async function deleteRow(table, id, name) {
   if (!confirmed) return;
 
   setStatus(globalStatus, "Deleting data...");
-  const storageSelect = table === "catalog_products" ? "image_url,images" : "image_url";
+  const storageSelect = storageSelectForTable(table);
   const { data: rowForStorage, error: storageLookupError } = await supabaseClient
     .from(table)
     .select(storageSelect)
@@ -1007,3 +1294,6 @@ if (supabaseClient) {
   });
   refreshSessionView();
 }
+
+setupImageEditor();
+setupImagePreviews();
