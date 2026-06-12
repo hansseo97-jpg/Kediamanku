@@ -62,7 +62,9 @@ function mapSupabaseProduct(row) {
       ? [resolveImagePath(row.image_url)]
       : ["../assets/images/hero-kitchen-living.webp"];
   const catalogImage = galleryImages[0] || "../assets/images/hero-kitchen-living.webp";
-  const detailLink = `product/index.html?slug=${encodeURIComponent(row.slug || row.id)}`;
+  const detailLink = window.location.protocol === "file:"
+    ? `product/index.html?slug=${encodeURIComponent(row.slug || row.id)}`
+    : `${encodeURIComponent(row.slug || row.id)}/`;
 
   return {
     id: row.slug || row.id,
@@ -260,7 +262,7 @@ function createProductCard(product, index) {
   article.innerHTML = `
     <div class="product-image">
       <a class="product-image-link" href="${escapeHtml(product.link)}" aria-label="View ${escapeHtml(product.name)} product detail">
-        <img src="${escapeHtml(product.image)}" alt="${escapeHtml(product.alt)}" loading="lazy">
+        <img src="${escapeHtml(product.image)}" alt="${escapeHtml(product.alt)}" loading="lazy" decoding="async">
       </a>
       <button class="quick-view" type="button" aria-label="Quick view ${escapeHtml(product.name)}">&#8599;</button>
     </div>

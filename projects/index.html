@@ -6,15 +6,23 @@
     <title>Our Projects | Kediamanku Interior Design & Build</title>
     <meta name="description" content="Explore Kediamanku selected interior projects for kitchen sets, custom wardrobes, bedroom interiors, kids rooms, and storage with refined detailing.">
     <meta name="theme-color" content="#F7F3EC">
+    <link rel="canonical" href="https://kediamanku.id/projects/">
+    <meta property="og:title" content="Our Projects | Kediamanku Interior Design & Build">
+    <meta property="og:description" content="Explore selected Kediamanku interior projects crafted around real homes, daily function, and refined details.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://kediamanku.id/projects/">
+    <meta property="og:image" content="https://kediamanku.id/assets/images/hero-kitchen-living.webp">
+    <meta name="twitter:card" content="summary_large_image">
     <link rel="icon" href="../kediamanku-monogram.svg" type="image/svg+xml">
     <link rel="stylesheet" href="projects.css">
+    <link rel="stylesheet" href="../assets/site-core.css">
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to projects</a>
 
     <header class="projects-nav" aria-label="Projects page navigation">
       <a class="brand" href="../index.html" aria-label="Back to Kediamanku homepage">
-        <img src="../assets/images/logo-kediamanku-transparent.png" alt="Kediamanku Design Build logo" width="1121" height="274">
+        <img decoding="async" src="../assets/images/logo-kediamanku-transparent.png" alt="Kediamanku Design Build logo" width="1121" height="274">
       </a>
       <nav aria-label="Primary navigation">
         <a href="../index.html#home">Home</a>
@@ -52,6 +60,14 @@
           <button class="filter-pill" type="button" data-filter="Storage">Storage</button>
           <button class="filter-pill" type="button" data-filter="Apartment">Apartment</button>
           <button class="filter-pill" type="button" data-filter="House">House</button>
+          <label class="filter-field">
+            <span>Location</span>
+            <input type="search" placeholder="BSD, Gading Serpong..." data-location-filter>
+          </label>
+          <label class="filter-field">
+            <span>Year</span>
+            <input type="search" placeholder="2026" data-year-filter>
+          </label>
         </div>
       </section>
 
@@ -75,7 +91,7 @@
     <footer class="site-footer">
       <div class="container footer-grid">
         <div>
-          <img class="footer-logo" src="../kediamanku-white.svg" alt="Kediamanku Design Build logo" width="210" height="46">
+          <img decoding="async" class="footer-logo" src="../kediamanku-white.svg" alt="Kediamanku Design Build logo" width="210" height="46">
           <p>Premium design and build interiors for kitchens, wardrobes, bedrooms, and kids rooms.</p>
         </div>
         <nav aria-label="Footer navigation">
@@ -108,7 +124,8 @@
       </div>
     </footer>
 
-    <script src="../supabase-config.js"></script>
-    <script src="projects.js"></script>
+    <script defer src="../supabase-config.js"></script>
+    <script defer src="projects.js"></script>
+    <script defer src="../assets/site-core.js"></script>
   </body>
 </html>

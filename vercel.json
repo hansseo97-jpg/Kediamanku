@@ -3,6 +3,38 @@
   "trailingSlash": true,
   "rewrites": [
     {
+      "source": "/sitemap.xml",
+      "destination": "/api/sitemap"
+    },
+    {
+      "source": "/katalog/:slug/product.css",
+      "destination": "/katalog/product/product.css"
+    },
+    {
+      "source": "/katalog/:slug/product.js",
+      "destination": "/katalog/product/product.js"
+    },
+    {
+      "source": "/projects/:slug/project-detail.css",
+      "destination": "/projects/detail/project-detail.css"
+    },
+    {
+      "source": "/projects/:slug/project-testimonial.css",
+      "destination": "/projects/detail/project-testimonial.css"
+    },
+    {
+      "source": "/projects/:slug/project-testimonial.js",
+      "destination": "/projects/detail/project-testimonial.js"
+    },
+    {
+      "source": "/blog/:slug/blog-detail.css",
+      "destination": "/blog/detail/blog-detail.css"
+    },
+    {
+      "source": "/blog/:slug/blog-detail.js",
+      "destination": "/blog/detail/blog-detail.js"
+    },
+    {
       "source": "/katalog/:slug/",
       "destination": "/katalog/product/index.html?slug=:slug"
     },
@@ -25,6 +57,33 @@
   ],
   "headers": [
     {
+      "source": "/assets/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/(.*).css",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/(.*).js",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
       "source": "/(.*)",
       "headers": [
         {
@@ -32,8 +91,16 @@
           "value": "nosniff"
         },
         {
+          "key": "X-Frame-Options",
+          "value": "SAMEORIGIN"
+        },
+        {
           "key": "Referrer-Policy",
           "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "camera=(), microphone=(), geolocation=()"
         }
       ]
     }

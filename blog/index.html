@@ -6,6 +6,13 @@
     <title>Kediamanku Interior Blog</title>
     <meta name="description" content="Kediamanku editorial articles about premium custom interiors, kitchen sets, wardrobes, bedrooms, and kids rooms.">
     <meta name="theme-color" content="#F7F3EC">
+    <link rel="canonical" href="https://kediamanku.id/blog/">
+    <meta property="og:title" content="Kediamanku Interior Blog">
+    <meta property="og:description" content="Interior notes and practical guides for premium kitchen sets, custom wardrobes, bedrooms, and kids rooms.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://kediamanku.id/blog/">
+    <meta property="og:image" content="https://kediamanku.id/assets/images/hero-kitchen-living.webp">
+    <meta name="twitter:card" content="summary_large_image">
     <link rel="icon" href="../kediamanku-monogram.svg" type="image/svg+xml">
     <link rel="stylesheet" href="../projects/projects.css">
     <style>
@@ -13,13 +20,14 @@
       .archive-meta { grid-template-columns: 84px minmax(0, 1fr); min-height: 108px; }
       .blog-hidden-note { max-width: 680px; color: rgba(48,58,66,.68); font-weight: 650; }
     </style>
+    <link rel="stylesheet" href="../assets/site-core.css">
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to blog articles</a>
 
     <header class="projects-nav" aria-label="Blog page navigation">
       <a class="brand" href="../index.html" aria-label="Back to Kediamanku homepage">
-        <img src="../assets/images/logo-kediamanku-transparent.png" alt="Kediamanku Design Build logo" width="1121" height="274">
+        <img decoding="async" src="../assets/images/logo-kediamanku-transparent.png" alt="Kediamanku Design Build logo" width="1121" height="274">
       </a>
       <nav aria-label="Primary navigation">
         <a href="../index.html#home">Home</a>
@@ -38,7 +46,7 @@
             <span class="section-label">Kediamanku Blog</span>
             <h1 class="mask-heading"><span>Interior notes</span><span>for refined homes.</span></h1>
           </header>
-          <p class="blog-hidden-note">A hidden SEO editorial archive for Kediamanku. Articles are not shown in the main navigation but remain indexable when published.</p>
+          <p class="blog-hidden-note">Guides, material notes, and practical ideas for homeowners planning premium kitchen sets, custom wardrobes, bedroom interiors, and kids rooms.</p>
         </div>
       </section>
 
@@ -51,7 +59,7 @@
     <footer class="site-footer">
       <div class="container footer-grid">
         <div>
-          <img class="footer-logo" src="../kediamanku-white.svg" alt="Kediamanku Design Build logo" width="210" height="46">
+          <img decoding="async" class="footer-logo" src="../kediamanku-white.svg" alt="Kediamanku Design Build logo" width="210" height="46">
           <p>Premium design and build interiors for kitchens, wardrobes, bedrooms, and kids rooms.</p>
         </div>
         <nav aria-label="Footer navigation">
@@ -84,7 +92,8 @@
       </div>
     </footer>
 
-    <script src="../supabase-config.js"></script>
-    <script src="blog-archive.js"></script>
+    <script defer src="../supabase-config.js"></script>
+    <script defer src="blog-archive.js"></script>
+    <script defer src="../assets/site-core.js"></script>
   </body>
 </html>
